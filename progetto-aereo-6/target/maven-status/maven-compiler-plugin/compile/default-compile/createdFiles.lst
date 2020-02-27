@@ -1,6 +1,0 @@
-services/ticketsale/model/Sale.class
-services/ticketsale/controller/TicketController.class
-services/ticketsale/repository/FlightRepository.class
-services/ticketsale/controller/FlightController.class
-services/ticketsale/model/Ticket.class
-services/ticketsale/model/Flight.class
