@@ -2,13 +2,14 @@ package services.ticketsale.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Link;
 
 public class Sale {
-	private Ticket ticket;
+	private List<Ticket> tickets;
 	private String code;
 	private int quantity;
 	private double totPrice;
@@ -17,7 +18,9 @@ public class Sale {
 	
 	public Sale(String code, int quantity, double totPrice, Ticket ticket) {
 		super();
-		this.ticket = ticket;
+		tickets = new ArrayList<>();
+		for(int ticketsQ = 0; ticketsQ < quantity; ticketsQ++)
+			this.tickets.add(new Ticket(ticket));
 		this.code = code;
 		this.quantity = quantity;
 		this.totPrice = totPrice;
@@ -62,12 +65,20 @@ public class Sale {
 		this.saleDate = saleDate;
 	}
 
-	public Ticket getTicket() {
-		return ticket;
+	public List<Ticket> getTicket() {
+		return tickets;
+	}
+
+	public void setTicket(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+	
+	public Ticket getTicket(int i) {
+		return tickets.get(i);
 	}
 
 	public void setTicket(Ticket ticket) {
-		this.ticket = ticket;
+		this.tickets.add(ticket);
 	}
 
 	public List<Link> getLinks() {
@@ -78,10 +89,11 @@ public class Sale {
 		this.links = links;
 	}
 
+	//Mettere un ciclo per selezionare il singolo ticket al posto di tickets.toString()
 	@Override
 	public String toString() {
 		return "Sale [code=" + code + ", quantity=" + quantity + ", totPrice=" + totPrice + ", saleDate=" + saleDate
-				+ ", ticket=" + ticket.toString() + "]";
+				+ ", ticket=" + tickets.toString() + "]";
 	}
 
 	@Override

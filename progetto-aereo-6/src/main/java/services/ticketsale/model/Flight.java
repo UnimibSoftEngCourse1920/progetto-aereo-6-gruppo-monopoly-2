@@ -14,6 +14,7 @@ public class Flight {
 	private Date departureTime;
 	private Date arrivalTime;
 	private int seatsNumber;
+	private boolean[] seats;
 	private double price;
 	private List<Link> links;
 	
@@ -31,6 +32,7 @@ public class Flight {
 			e.printStackTrace();
 		}
 		this.seatsNumber = seatsNumber;
+		this.seats = new boolean[seatsNumber];
 		this.price = price;
 	}
 
@@ -80,6 +82,22 @@ public class Flight {
 
 	public void setSeatsNumber(int seatsNumber) {
 		this.seatsNumber = seatsNumber;
+	}
+	
+	public boolean getSeats(int i) {
+		return seats[i];
+	}
+
+	public void setSeats(int i, boolean occupy) {
+		this.seats[i] = occupy;
+	}
+	
+	public boolean[] getSeats() {
+		return seats;
+	}
+
+	public void setSeats(boolean[] seats) {
+		this.seats = seats;
 	}
 
 	public List<Link> getLinks() {

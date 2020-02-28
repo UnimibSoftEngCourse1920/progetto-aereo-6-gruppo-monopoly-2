@@ -12,7 +12,13 @@ public class Ticket {
   public Ticket(Flight flight) {
 	  super();
 	  this.flight = flight;
-	  //this.seat = seat;
+  }
+  
+  public Ticket(Ticket ticket) {
+	  super();
+	  this.flight = ticket.getFlight();
+	  this.seat = ticket.getSeat();
+	  this.links = ticket.getLinks();
   }
 
   public Flight getFlight() {
