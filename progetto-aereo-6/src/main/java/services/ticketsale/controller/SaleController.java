@@ -40,7 +40,6 @@ public class SaleController {
 		System.out.println(jsonString);
 		
 		Ticket ticket = new Ticket(jsonString);
-		System.out.println(ticket.getCode());
 
 		Link self = Link.fromUri(uriInfo.getAbsolutePath()).title("sale").rel("self").type("POST").build();
 
@@ -48,17 +47,18 @@ public class SaleController {
 
 		// Trovare altri metodi per selezionare il codice "AAA"
 		Sale sale = new Sale("AAA", 2, ticket);
+		
 
-		System.out.println(sale.getCode());
-		System.out.println(sale.getSaleDate());
-		System.out.println(sale.getTotPrice());
-	
-		
-		
 		List<Link> links = new ArrayList<>();
 		links.add(self);
 		links.add(confirm);
 		sale.setLinks(links);
+		
+		System.out.println(sale.getTicket(0).getLinks());
+		System.out.println(sale.getCode());
+		System.out.println(sale.getSaleDate());
+		System.out.println(sale.getTotPrice());
+		System.out.println(sale.getTicket(0).getLinks());
 		
 		return Response.ok(sale).links(self, confirm).build();
 	}

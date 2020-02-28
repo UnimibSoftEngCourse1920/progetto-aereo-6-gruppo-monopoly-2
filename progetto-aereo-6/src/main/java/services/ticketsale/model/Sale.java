@@ -19,20 +19,17 @@ public class Sale {
 	public Sale(String code, int quantity, Ticket ticket) {
 		super();
 		this.code = code;
-
+		
+		this.quantity = quantity;
 		int baseQ = 1;
 		if (baseQ >= quantity)
 			this.quantity = baseQ;
-		else
-			this.quantity = quantity;
 
 		tickets = new ArrayList<>();
 		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++)
 			this.tickets.add(new Ticket(ticket));
 
-		double totPrice;
-		totPrice = ticket.getPrice() * quantity;
-		this.totPrice = totPrice;
+		this.totPrice = ticket.getPrice() * quantity;;
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 		try {
