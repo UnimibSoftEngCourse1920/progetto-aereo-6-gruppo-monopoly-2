@@ -9,26 +9,35 @@ import java.util.List;
 import javax.ws.rs.core.Link;
 
 public class Sale {
-	private List<Ticket> tickets;
 	private String code;
 	private int quantity;
 	private double totPrice;
 	private Date saleDate;
+	private List<Ticket> tickets;
 	private List<Link> links;
-	
-	public Sale(String code, int quantity, double totPrice, Ticket ticket) {
+
+	public Sale(String code, int quantity, Ticket ticket) {
 		super();
-		tickets = new ArrayList<>();
-		for(int ticketsQ = 0; ticketsQ < quantity; ticketsQ++)
-			this.tickets.add(new Ticket(ticket));
 		this.code = code;
-		this.quantity = quantity;
+
+		int baseQ = 1;
+		if (baseQ >= quantity)
+			this.quantity = baseQ;
+		else
+			this.quantity = quantity;
+
+		tickets = new ArrayList<>();
+		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++)
+			this.tickets.add(new Ticket(ticket));
+
+		double totPrice;
+		totPrice = ticket.getPrice() * quantity;
 		this.totPrice = totPrice;
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 		try {
-			this.saleDate = sdf.parse(sdf.format(new Date (System.currentTimeMillis())));
+			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -72,7 +81,7 @@ public class Sale {
 	public void setTicket(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	
+
 	public Ticket getTicket(int i) {
 		return tickets.get(i);
 	}
@@ -89,7 +98,8 @@ public class Sale {
 		this.links = links;
 	}
 
-	//Mettere un ciclo per selezionare il singolo ticket al posto di tickets.toString()
+	// Mettere un ciclo per selezionare il singolo ticket al posto di
+	// tickets.toString()
 	@Override
 	public String toString() {
 		return "Sale [code=" + code + ", quantity=" + quantity + ", totPrice=" + totPrice + ", saleDate=" + saleDate

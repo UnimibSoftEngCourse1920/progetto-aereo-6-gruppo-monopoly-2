@@ -3,9 +3,6 @@ package services.ticketsale.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
-import javax.ws.rs.core.Link;
 
 public class Flight {
 	private String code;
@@ -13,13 +10,12 @@ public class Flight {
 	private String arrivalAirport;
 	private Date departureTime;
 	private Date arrivalTime;
+	private double price;
 	private int seatsNumber;
 	private boolean[] seats;
-	private double price;
-	private List<Link> links;
-	
-	public Flight(String code, String departureAirport, String arrivalAirport, 
-			String departureTime, String arrivalTime, int seatsNumber, double price) {
+
+	public Flight(String code, String departureAirport, String arrivalAirport, String departureTime, String arrivalTime,
+			int seatsNumber, double price) {
 		super();
 		this.code = code;
 		this.departureAirport = departureAirport;
@@ -31,9 +27,9 @@ public class Flight {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		this.price = price;
 		this.seatsNumber = seatsNumber;
 		this.seats = new boolean[seatsNumber];
-		this.price = price;
 	}
 
 	public String getCode() {
@@ -79,11 +75,19 @@ public class Flight {
 	public int getSeatsNumber() {
 		return seatsNumber;
 	}
+	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
 	public void setSeatsNumber(int seatsNumber) {
 		this.seatsNumber = seatsNumber;
 	}
-	
+
 	public boolean getSeats(int i) {
 		return seats[i];
 	}
@@ -91,7 +95,7 @@ public class Flight {
 	public void setSeats(int i, boolean occupy) {
 		this.seats[i] = occupy;
 	}
-	
+
 	public boolean[] getSeats() {
 		return seats;
 	}
@@ -100,22 +104,6 @@ public class Flight {
 		this.seats = seats;
 	}
 
-	public List<Link> getLinks() {
-		return links;
-	}
-
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
-	
-	public double getPrice() {
-		return price;
-	}
-	
-	public void setPrice(double price) {
-		this.price = price;
-	}
-	
 	@Override
 	public String toString() {
 		return "Flight [code=" + code + ", departureAirport=" + departureAirport + ", arrivalAirport=" + arrivalAirport
@@ -147,5 +135,5 @@ public class Flight {
 			return false;
 		return true;
 	}
-	
+
 }
