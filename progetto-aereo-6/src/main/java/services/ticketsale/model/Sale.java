@@ -8,13 +8,39 @@ import java.util.List;
 
 import javax.ws.rs.core.Link;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+
 public class Sale {
+	@Expose
 	private String code;
+	
+	@Expose
 	private int quantity;
+	
+	@Expose
 	private double totPrice;
+	
+	@Expose
 	private Date saleDate;
+	
+	@Expose
 	private List<Ticket> tickets;
+	
 	private List<Link> links;
+	
+	public Sale(String jsonString) {
+		super();
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		Sale sale = gson.fromJson(jsonString, Sale.class);
+		this.code = sale.getCode();
+		this.quantity = sale.getQuantity();
+		this.totPrice = sale.getTotPrice();
+		this.saleDate = sale.getSaleDate();
+		this.tickets = sale.getTicket();
+		this.links = null;
+	}
 
 	public Sale(String code, int quantity, Ticket ticket) {
 		super();
@@ -99,8 +125,11 @@ public class Sale {
 	// tickets.toString()
 	@Override
 	public String toString() {
+		String ticket = "";
+		for(int i = 0; i < quantity; i++)
+			ticket = ticket + tickets.get(i).toString();
 		return "Sale [code=" + code + ", quantity=" + quantity + ", totPrice=" + totPrice + ", saleDate=" + saleDate
-				+ ", ticket=" + tickets.toString() + "]";
+				+ ", ticket=" + ticket + "]";
 	}
 
 	@Override
@@ -127,5 +156,46 @@ public class Sale {
 			return false;
 		return true;
 	}
+	
+	/*{"code":"AAA",
+	 * "links":
+	 * [
+	 *   {"params": {"rel":"self","title":"sale","type":"POST"},
+	 *   "rel":"self",
+	 *   "rels":["self"],
+	 *   "title":"sale",
+	 *   "type":"POST",
+	 *   "uri":"http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
+	 *   "uriBuilder":{"absolute":true}},
+	 *   
+	 *   {"params":{"rel":"next","title":"sale","type":"PUT"},
+	 *   "rel":"next",
+	 *   "rels":["next"],
+	 *   "title":"sale",
+	 *   "type":"PUT",
+	 *   "uri":"http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
+	 *   "uriBuilder":{"absolute":true}}
+	 * ],
+	 * "quantity":2,
+	 * "saleDate":"2020-02-28T03:11:00Z[UTC]",
+	 * "ticket":
+	 * [
+	 *   {"arrivalAirport":"Milano",
+	 *   "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
+	 *   "code":"C10001",
+	 *   "departureAirport":"Roma",
+	 *   "departureTime":"0016-04-09T13:10:00Z[UTC]",
+	 *   "price":20.0,
+	 *   "seat":0},
+	 *   
+	 *   {"arrivalAirport":"Milano",
+	 *   "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
+	 *   "code":"C10001",
+	 *   "departureAirport":"Roma",
+	 *   "departureTime":"0016-04-09T13:10:00Z[UTC]",
+	 *   "price":20.0,
+	 *   "seat":0}
+	 *   ],
+	 *    "totPrice":40.0}*/
 
 }

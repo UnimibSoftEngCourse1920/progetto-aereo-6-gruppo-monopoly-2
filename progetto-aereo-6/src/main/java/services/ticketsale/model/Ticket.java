@@ -1,23 +1,53 @@
 package services.ticketsale.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Link;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+
 public class Ticket {
+	@Expose
 	private String code;
+	
+	@Expose
 	private String departureAirport;
+	
+	@Expose
 	private String arrivalAirport;
+	
+	@Expose
 	private Date departureTime;
+	
+	@Expose
 	private Date arrivalTime;
+	
+	@Expose
 	private double price;
+	
+	@Expose
 	private int seat;
+	
 	private List<Link> links;
+
 	
-	
+	public Ticket(String jsonString) {
+		super();
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		Ticket ticket = gson.fromJson(jsonString, Ticket.class);
+		this.code = ticket.getCode();
+		this.departureAirport = ticket.getDepartureAirport();
+		this.arrivalAirport = ticket.getArrivalAirport();
+		this.departureTime = ticket.getDepartureTime();
+		this.arrivalTime = ticket.getArrivalTime();
+		this.price = ticket.getPrice();
+		this.seat = ticket.getSeat();
+		this.links = null;
+	}
+	/*
 	public Ticket(String jsonString) {
 		super();
 		String[] attr = jsonToAttr(jsonString);
@@ -34,7 +64,7 @@ public class Ticket {
 		this.price = Double.parseDouble(attr[5]);
 		this.seat = Integer.parseInt(attr[6]);
 		this.links = null;
-	}
+	}*/
 
 	public Ticket(Ticket ticket) {
 		super();
@@ -157,6 +187,7 @@ public class Ticket {
 		return true;
 	}
 	
+/*
 	public static String[] jsonToAttr(String jsonString) {
 		String[] ret = new String[7];
 		int i = 0;
@@ -206,4 +237,5 @@ public class Ticket {
 		
 		return ret;
 	}
+*/
 }
