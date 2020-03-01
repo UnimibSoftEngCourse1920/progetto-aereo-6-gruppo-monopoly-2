@@ -45,7 +45,6 @@ public class Ticket {
 		this.arrivalTime = ticket.getArrivalTime();
 		this.price = ticket.getPrice();
 		this.seat = ticket.getSeat();
-		this.links = null;
 	}
 	/*
 	public Ticket(String jsonString) {
@@ -75,7 +74,6 @@ public class Ticket {
 		this.arrivalTime = ticket.getArrivalTime();
 		this.price = ticket.getPrice();
 		this.seat = ticket.getSeat();
-		this.links = ticket.getLinks();
 	}
 
 	public Ticket(Flight flight) {

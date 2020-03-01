@@ -1,5 +1,6 @@
 package services.ticketsale.model;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,10 +8,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Link;
+import javax.ws.rs.core.Request;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 
 public class Sale {
 	@Expose
@@ -25,11 +28,11 @@ public class Sale {
 	@Expose
 	private Date saleDate;
 	
-	@Expose
 	private List<Ticket> tickets;
 	
 	private List<Link> links;
-	
+
+
 	public Sale(String jsonString) {
 		super();
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -38,9 +41,15 @@ public class Sale {
 		this.quantity = sale.getQuantity();
 		this.totPrice = sale.getTotPrice();
 		this.saleDate = sale.getSaleDate();
-		this.tickets = sale.getTicket();
-		this.links = null;
-	}
+		String ticketString = ticketFromJson(jsonString);
+		/*
+		gson = new Gson();
+		List<Ticket> tickets = gson.fromJson(ticketString, new TypeToken<ArrayList<Ticket>>(){}.getType());
+		sale.setTicket(tickets);
+		//System.out.println(sale.getTicket(0));
+		//System.out.println(sale.getTicket(1));
+		 */
+	} 
 
 	public Sale(String code, int quantity, Ticket ticket) {
 		super();
@@ -155,6 +164,12 @@ public class Sale {
 		} else if (!code.equals(other.code))
 			return false;
 		return true;
+	}
+	
+	public static String ticketFromJson(String jsonString) {
+		String[] sub = jsonString.split("ticket\":");
+		int finalIndex = sub[1].lastIndexOf("]")+1;
+		return sub[1].substring(0, finalIndex);
 	}
 	
 	/*{"code":"AAA",

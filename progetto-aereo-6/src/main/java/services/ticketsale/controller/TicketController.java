@@ -47,7 +47,11 @@ public class TicketController {
 		// Generiamo un link self alla collezione di tickets.
 		// uriInfo.getAbsolutePath() =
 		// http://localhost:8080/progetto-aereo-6/ticketsale/tickets
-		Link collection = Link.fromUri(uriInfo.getAbsolutePath()).title("tickets").rel("self").type("GET").build();
+		Link collection = Link.fromUri(uriInfo.getAbsolutePath())
+				.title("tickets")
+				.rel("self")
+				.type("GET")
+				.build();
 
 		// Accediamo al repository e prendiamo tutti i voloi in esso contenuti
 		Collection<Flight> flights = FlightRepository.getInstance().findAll();
@@ -94,7 +98,11 @@ public class TicketController {
 		Ticket ticket = new Ticket(flight);
 		
 		// Generiamo i link self al ticket ed il link collection all'intera collezione
-		Link self = Link.fromUri(uriInfo.getAbsolutePath()).title("ticket").rel("self").type("GET").build();
+		Link self = Link.fromUri(uriInfo.getAbsolutePath())
+				.title("ticket")
+				.rel("self")
+				.type("GET")
+				.build();
 
 		String absolutePath = uriInfo.getAbsolutePath().toString();
 		Link collection = Link.fromUri(URI.create(absolutePath.substring(0, absolutePath.lastIndexOf('/'))))
@@ -112,8 +120,8 @@ public class TicketController {
 
 		// Aggiungiamo i link generati all'oggetto ticket
 		List<Link> links = new ArrayList<>();
-		links.add(collection);
 		links.add(self);
+		links.add(collection);
 		links.add(next);
 		ticket.setLinks(links);
 
