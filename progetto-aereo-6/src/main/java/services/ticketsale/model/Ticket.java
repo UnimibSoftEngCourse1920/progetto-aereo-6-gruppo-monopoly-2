@@ -46,24 +46,6 @@ public class Ticket {
 		this.price = ticket.getPrice();
 		this.seat = ticket.getSeat();
 	}
-	/*
-	public Ticket(String jsonString) {
-		super();
-		String[] attr = jsonToAttr(jsonString);
-		this.code = attr[0];
-		this.departureAirport = attr[1];
-		this.arrivalAirport = attr[2];
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
-		try {
-			this.departureTime = sdf.parse(attr[3]);
-			this.arrivalTime = sdf.parse(attr[4]);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		this.price = Double.parseDouble(attr[5]);
-		this.seat = Integer.parseInt(attr[6]);
-		this.links = null;
-	}*/
 
 	public Ticket(Ticket ticket) {
 		super();
@@ -185,7 +167,26 @@ public class Ticket {
 		return true;
 	}
 	
-/*
+	/* Costruttore alternativo da stringa JSON
+	public Ticket(String jsonString) {
+		super();
+		String[] attr = jsonToAttr(jsonString);
+		this.code = attr[0];
+		this.departureAirport = attr[1];
+		this.arrivalAirport = attr[2];
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		try {
+			this.departureTime = sdf.parse(attr[3]);
+			this.arrivalTime = sdf.parse(attr[4]);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		this.price = Double.parseDouble(attr[5]);
+		this.seat = Integer.parseInt(attr[6]);
+		this.links = null;
+	}*/
+	
+	/* Supporto al costruttore
 	public static String[] jsonToAttr(String jsonString) {
 		String[] ret = new String[7];
 		int i = 0;
@@ -235,5 +236,5 @@ public class Ticket {
 		
 		return ret;
 	}
-*/
+	*/
 }

@@ -58,24 +58,24 @@ public class SaleController {
 		
 		return Response.ok(sale).links(self, confirm).build();
 	}
-/* 
+	/*
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response confirmSale(String jsonString) {
+	public Response confirmSale(Sale sale) {
 		
-		System.out.println(jsonString);
+		//System.out.println(jsonString);
 		
-		System.out.println(Sale.ticketFromJson(jsonString));
+		//System.out.println(Sale.ticketFromJson(jsonString));
 		
-		Sale sale = new Sale(jsonString);
+		//Sale sale = new Sale(jsonString);
 		
 		return Response.ok(sale).build();
 
 	}
-	*/
-
-	/**
+*/
+	
+	/** Funzioni non definitive per il PUT
 	 * private static void takeSeat(Sale sale) { for(int i = 0; i <
 	 * sale.getQuantity(); i++) { for(int j = 0; j <
 	 * sale.getTicket(i).getFlight().getSeatsNumber(); j++) {
