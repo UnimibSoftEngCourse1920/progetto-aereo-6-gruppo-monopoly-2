@@ -1,39 +1,69 @@
 package services.ticketsale.model;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.ws.rs.core.Link;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
-
 public class Ticket {
-	@Expose
-	private String code;
-	
-	@Expose
-	private String departureAirport;
-	
-	@Expose
-	private String arrivalAirport;
-	
-	@Expose
-	private Date departureTime;
-	
-	@Expose
-	private Date arrivalTime;
-	
-	@Expose
-	private double price;
-	
-	@Expose
+	private Flight flight;
 	private int seat;
 	
-	private List<Link> links;
+	public Ticket(Flight flight) {
+		super();
+		this.flight = flight;
+	}
+	
+	public Ticket(Ticket ticket) {
+		super();
+		this.flight = ticket.getFlight();
+		this.seat = ticket.getSeat();
+	}
+
+	public Flight getFlight() {
+		return flight;
+	}
+
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+
+	public int getSeat() {
+		return seat;
+	}
+
+	public void setSeat(int seat) {
+		this.seat = seat;
+	}
+	
+	@Override
+	public String toString() {
+		return "Ticket [flight=" + flight + ", seat=" + seat + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((flight == null) ? 0 : flight.hashCode());
+		result = prime * result + seat;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Ticket))
+			return false;
+		Ticket other = (Ticket) obj;
+		if (flight == null) {
+			if (other.flight != null)
+				return false;
+		} else if (!flight.equals(other.flight))
+			return false;
+		if (seat != other.seat)
+			return false;
+		return true;
+	}
 
 	
+	/*
 	public Ticket(String jsonString) {
 		super();
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -45,127 +75,7 @@ public class Ticket {
 		this.arrivalTime = ticket.getArrivalTime();
 		this.price = ticket.getPrice();
 		this.seat = ticket.getSeat();
-	}
-
-	public Ticket(Ticket ticket) {
-		super();
-		this.code = ticket.getCode();
-		this.departureAirport = ticket.getDepartureAirport();
-		this.arrivalAirport = ticket.getArrivalAirport();
-		this.departureTime = ticket.getDepartureTime();
-		this.arrivalTime = ticket.getArrivalTime();
-		this.price = ticket.getPrice();
-		this.seat = ticket.getSeat();
-	}
-
-	public Ticket(Flight flight) {
-		super();
-		this.code = flight.getCode();
-		this.departureAirport = flight.getDepartureAirport();
-		this.arrivalAirport = flight.getArrivalAirport();
-		this.departureTime = flight.getDepartureTime();
-		this.arrivalTime = flight.getArrivalTime();
-		this.price = flight.getPrice();
-		this.seat = 0;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getDepartureAirport() {
-		return departureAirport;
-	}
-
-	public void setDepartureAirport(String departureAirport) {
-		this.departureAirport = departureAirport;
-	}
-
-	public String getArrivalAirport() {
-		return arrivalAirport;
-	}
-
-	public void setArrivalAirport(String arrivalAirport) {
-		this.arrivalAirport = arrivalAirport;
-	}
-
-	public Date getDepartureTime() {
-		return departureTime;
-	}
-
-	public void setDepartureTime(Date departureTime) {
-		this.departureTime = departureTime;
-	}
-
-	public Date getArrivalTime() {
-		return arrivalTime;
-	}
-
-	public void setArrivalTime(Date arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public int getSeat() {
-		return seat;
-	}
-
-	public void setSeat(int seat) {
-		this.seat = seat;
-	}
-
-	public List<Link> getLinks() {
-		return links;
-	}
-
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
-
-	@Override
-	public String toString() {
-		return "Ticket [code=" + code + ", departureAirport=" + departureAirport + ", arrivalAirport=" + arrivalAirport
-				+ ", departureTime=" + departureTime + ", arrivalTime=" + arrivalTime + ", price=" + price + ", seat=" + seat + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		result = prime * result + seat;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Ticket other = (Ticket) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		if (seat != other.seat)
-			return false;
-		return true;
-	}
+	}*/
 	
 	/* Costruttore alternativo da stringa JSON
 	public Ticket(String jsonString) {

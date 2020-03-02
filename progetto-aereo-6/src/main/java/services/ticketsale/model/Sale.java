@@ -1,73 +1,33 @@
 package services.ticketsale.model;
 
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.ws.rs.core.Link;
-import javax.ws.rs.core.Request;
-
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
-import com.google.gson.reflect.TypeToken;
+import java.util.TimeZone;
 
 public class Sale {
-	@Expose
 	private String code;
-	
-	@Expose
 	private int quantity;
-	
-	@Expose
 	private double totPrice;
-	
-	@Expose
 	private Date saleDate;
-	
+	private boolean paid;
 	private List<Ticket> tickets;
-	
-	private List<Link> links;
-
-
-	public Sale(String jsonString) {
-		super();
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		Sale sale = gson.fromJson(jsonString, Sale.class);
-		this.code = sale.getCode();
-		this.quantity = sale.getQuantity();
-		this.totPrice = sale.getTotPrice();
-		this.saleDate = sale.getSaleDate();
-		String ticketString = ticketFromJson(jsonString);
-		/*
-		gson = new Gson();
-		List<Ticket> tickets = gson.fromJson(ticketString, new TypeToken<ArrayList<Ticket>>(){}.getType());
-		sale.setTicket(tickets);
-		//System.out.println(sale.getTicket(0));
-		//System.out.println(sale.getTicket(1));
-		 */
-	} 
 
 	public Sale(String code, int quantity, Ticket ticket) {
 		super();
 		this.code = code;
-		
 		this.quantity = quantity;
 		int baseQ = 1;
 		if (baseQ >= quantity)
 			this.quantity = baseQ;
-
 		tickets = new ArrayList<>();
 		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++)
 			this.tickets.add(new Ticket(ticket));
-
-		this.totPrice = ticket.getPrice() * quantity;;
-
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		this.totPrice = ticket.getFlight().getPrice() * quantity;;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		try {
 			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
 		} catch (ParseException e) {
@@ -107,6 +67,14 @@ public class Sale {
 		this.saleDate = saleDate;
 	}
 
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
+	}
+
 	public List<Ticket> getTicket() {
 		return tickets;
 	}
@@ -123,16 +91,6 @@ public class Sale {
 		this.tickets.add(ticket);
 	}
 
-	public List<Link> getLinks() {
-		return links;
-	}
-
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
-
-	// Mettere un ciclo per selezionare il singolo ticket al posto di
-	// tickets.toString()
 	@Override
 	public String toString() {
 		String ticket = "";
@@ -154,9 +112,7 @@ public class Sale {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Sale))
 			return false;
 		Sale other = (Sale) obj;
 		if (code == null) {
@@ -166,12 +122,32 @@ public class Sale {
 			return false;
 		return true;
 	}
-	
+
 	public static String ticketFromJson(String jsonString) {
 		String[] sub = jsonString.split("ticket\":");
 		int finalIndex = sub[1].lastIndexOf("]")+1;
 		return sub[1].substring(0, finalIndex);
 	}
+	
+	/*
+	public Sale(String jsonString) {
+		super();
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		Sale sale = gson.fromJson(jsonString, Sale.class);
+		this.code = sale.getCode();
+		this.quantity = sale.getQuantity();
+		this.totPrice = sale.getTotPrice();
+		this.saleDate = sale.getSaleDate();
+		String ticketString = ticketFromJson(jsonString);
+		/*
+		gson = new Gson();
+		List<Ticket> tickets = gson.fromJson(ticketString, new TypeToken<ArrayList<Ticket>>(){}.getType());
+		sale.setTicket(tickets);
+		//System.out.println(sale.getTicket(0));
+		//System.out.println(sale.getTicket(1));
+		 
+	} 
+*/
 	
 	/*{"code":"AAA",
 	 * "links":

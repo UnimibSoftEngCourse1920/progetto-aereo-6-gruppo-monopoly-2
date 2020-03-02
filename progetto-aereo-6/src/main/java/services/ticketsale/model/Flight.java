@@ -3,6 +3,7 @@ package services.ticketsale.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Flight {
 	private String code;
@@ -15,12 +16,13 @@ public class Flight {
 	private boolean[] seats;
 
 	public Flight(String code, String departureAirport, String arrivalAirport, String departureTime, String arrivalTime,
-			int seatsNumber, double price) {
+			double price, int seatsNumber) {
 		super();
 		this.code = code;
 		this.departureAirport = departureAirport;
 		this.arrivalAirport = arrivalAirport;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		try {
 			this.departureTime = sdf.parse(departureTime);
 			this.arrivalTime = sdf.parse(arrivalTime);
@@ -123,9 +125,7 @@ public class Flight {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Flight))
 			return false;
 		Flight other = (Flight) obj;
 		if (code == null) {
@@ -135,5 +135,6 @@ public class Flight {
 			return false;
 		return true;
 	}
+
 
 }

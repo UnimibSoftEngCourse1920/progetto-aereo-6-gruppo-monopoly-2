@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import services.ticketsale.model.DtoTicket;
 import services.ticketsale.model.Flight;
 import services.ticketsale.model.Ticket;
 import services.ticketsale.repository.FlightRepository;
@@ -55,13 +56,13 @@ public class TicketController {
 
 		// Accediamo al repository e prendiamo tutti i voloi in esso contenuti
 		Collection<Flight> flights = FlightRepository.getInstance().findAll();
-		List<Ticket> tickets = new ArrayList<>();
+		List<DtoTicket> tickets = new ArrayList<>();
 
 		// Per ogni volo presente settiamo il link self al ticket e generiamo una lista di tickets
 		int i = 0;
 		for (Flight e : flights) {
 			List<Link> links = new ArrayList<>();
-			tickets.add(new Ticket(e));
+			tickets.add(new DtoTicket(new Ticket(e)));
 			links.add(Link.fromUri(uriInfo.getAbsolutePathBuilder().path(e.getCode()).build())
 					.title("ticket")
 					.rel("self")
@@ -95,7 +96,7 @@ public class TicketController {
 	public Response getTicket(@PathParam("code") String code) {
 		// Recuperiamo il volo grazie al repository
 		Flight flight = FlightRepository.getInstance().find(code);
-		Ticket ticket = new Ticket(flight);
+		DtoTicket ticket = new DtoTicket(new Ticket(flight));
 		
 		// Generiamo i link self al ticket ed il link collection all'intera collezione
 		Link self = Link.fromUri(uriInfo.getAbsolutePath())
