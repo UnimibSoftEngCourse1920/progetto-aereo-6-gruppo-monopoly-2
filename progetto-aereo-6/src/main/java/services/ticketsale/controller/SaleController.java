@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import services.auth.provider.Secured;
 import services.ticketsale.model.DtoSale;
 import services.ticketsale.model.Flight;
 import services.ticketsale.model.Sale;
@@ -34,7 +35,7 @@ public class SaleController {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
 	public Response getSale(@PathParam("code") String code) {
 		
 		Flight flight = FlightRepository.getInstance().find(code);
