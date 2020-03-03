@@ -1,4 +1,4 @@
-package services.ticketsale.model;
+package services.ticketsale.model.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -6,6 +6,9 @@ import java.util.List;
 import javax.ws.rs.core.Link;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import services.ticketsale.model.Flight;
+import services.ticketsale.model.Ticket;
 
 public class DtoTicket {
 	private String code;

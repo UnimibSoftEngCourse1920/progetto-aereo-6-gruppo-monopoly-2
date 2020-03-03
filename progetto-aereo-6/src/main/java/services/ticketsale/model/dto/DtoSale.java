@@ -1,4 +1,4 @@
-package services.ticketsale.model;
+package services.ticketsale.model.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -7,12 +7,13 @@ import javax.ws.rs.core.Link;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import services.ticketsale.model.Sale;
+
 public class DtoSale {
 	private String code;
 	private int quantity;
 	private double totPrice;
 	private String saleDate;
-	private boolean paid;
 	@JsonIgnore
 	private List<Link> links;
 	
@@ -25,7 +26,6 @@ public class DtoSale {
 		this.totPrice=sale.getTotPrice();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 		this.saleDate = sdf.format(sale.getSaleDate());
-		this.setPaid(sale.isPaid());
 	}
 
 	public String getCode() {
@@ -58,14 +58,6 @@ public class DtoSale {
 
 	public void setSaleDate(String saleDate) {
 		this.saleDate = saleDate;
-	}
-	
-	public boolean isPaid() {
-		return paid;
-	}
-
-	public void setPaid(boolean paid) {
-		this.paid = paid;
 	}
 
 	public List<Link> getLinks() {

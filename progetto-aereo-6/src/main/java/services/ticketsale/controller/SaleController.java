@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
@@ -20,10 +21,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import services.auth.provider.Secured;
-import services.ticketsale.model.DtoSale;
+import services.customer.model.Customer;
+import services.customer.repositiry.CustomerRepository;
 import services.ticketsale.model.Flight;
 import services.ticketsale.model.Sale;
 import services.ticketsale.model.Ticket;
+import services.ticketsale.model.dto.DtoSale;
 import services.ticketsale.repository.FlightRepository;
 import services.ticketsale.repository.SaleRepository;
 
@@ -36,11 +39,13 @@ public class SaleController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	public Response getSale(@PathParam("code") String code) {
+	public Response postSale(@PathParam("code") String code,
+			@FormParam("username") String username) {
 		
 		Flight flight = FlightRepository.getInstance().find(code);
 		Ticket ticket = new Ticket(flight);
-		Sale sale = new Sale("SALE0000", 3, ticket);
+		Customer customer = CustomerRepository.getInstance().find(username);
+		Sale sale = new Sale("SALE0000", 3, ticket, customer);
 		SaleRepository.getInstance().save(sale);
 
 		Link self = Link.fromUri(uriInfo.getAbsolutePath())
@@ -51,7 +56,7 @@ public class SaleController {
 
 		Link confirm = Link.fromUri(uriInfo.getAbsolutePath())
 				.title("sale")
-				.rel("confirm")
+				.rel("change")
 				.type("PUT")
 				.build();
 		
@@ -61,7 +66,7 @@ public class SaleController {
 		links.add(self);
 		links.add(confirm);
 		resSale.setLinks(links);
-		
+
 		return Response.ok(resSale).links(self, confirm).build();
 	}
 	
@@ -82,7 +87,6 @@ public class SaleController {
 		}
 		
 		Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
-		sale.setPaid(true);
 		
 		DtoSale resSale = new DtoSale(sale);
 		

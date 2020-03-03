@@ -7,25 +7,36 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import services.customer.model.Customer;
+
 public class Sale {
 	private String code;
 	private int quantity;
 	private double totPrice;
 	private Date saleDate;
-	private boolean paid;
+	private Customer customer;
 	private List<Ticket> tickets;
 
-	public Sale(String code, int quantity, Ticket ticket) {
+	public Sale(String code, int quantity, Ticket ticket, Customer customer) {
 		super();
 		this.code = code;
 		this.quantity = quantity;
+		
 		int baseQ = 1;
 		if (baseQ >= quantity)
 			this.quantity = baseQ;
+		
+		this.totPrice = ticket.getFlight().getPrice() * quantity;
+		
+		this.setCustomer(customer);
+		
 		tickets = new ArrayList<>();
-		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++)
-			this.tickets.add(new Ticket(ticket));
-		this.totPrice = ticket.getFlight().getPrice() * quantity;;
+		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++) {
+			Ticket nTicket = new Ticket(ticket);
+			nTicket.setSeat(ticket.getFlight().findSeat());
+			this.tickets.add(new Ticket(nTicket));
+		}
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		try {
@@ -67,12 +78,12 @@ public class Sale {
 		this.saleDate = saleDate;
 	}
 
-	public boolean isPaid() {
-		return paid;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setPaid(boolean paid) {
-		this.paid = paid;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public List<Ticket> getTicket() {

@@ -105,6 +105,17 @@ public class Flight {
 	public void setSeats(boolean[] seats) {
 		this.seats = seats;
 	}
+	
+	public int findSeat() {
+		int i;
+		for(i = 1; i < seatsNumber; i++) {
+			if(!seats[i]) {
+				seats[i] = true;
+				return i;
+			}
+		}
+		return 0;
+	}
 
 	@Override
 	public String toString() {

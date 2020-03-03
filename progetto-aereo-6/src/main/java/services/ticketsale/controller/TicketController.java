@@ -15,9 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import services.ticketsale.model.DtoTicket;
 import services.ticketsale.model.Flight;
 import services.ticketsale.model.Ticket;
+import services.ticketsale.model.dto.DtoTicket;
 import services.ticketsale.repository.FlightRepository;
 
 /**
