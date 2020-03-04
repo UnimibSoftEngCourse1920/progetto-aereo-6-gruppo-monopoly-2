@@ -116,7 +116,7 @@ public class TicketController {
 		Link next = Link.fromUri(uriInfo.getAbsolutePathBuilder().path("sale").build())
 				.title("sale")
 				.rel("next")
-				.type("POST")
+				.type("GET")
 				.build();
 
 		// Aggiungiamo i link generati all'oggetto ticket

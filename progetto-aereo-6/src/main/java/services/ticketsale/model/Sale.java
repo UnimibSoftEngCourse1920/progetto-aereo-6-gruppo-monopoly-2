@@ -17,33 +17,7 @@ public class Sale {
 	private Customer customer;
 	private List<Ticket> tickets;
 
-	public Sale(String code, int quantity, Ticket ticket, Customer customer) {
-		super();
-		this.code = code;
-		this.quantity = quantity;
-		
-		int baseQ = 1;
-		if (baseQ >= quantity)
-			this.quantity = baseQ;
-		
-		this.totPrice = ticket.getFlight().getPrice() * quantity;
-		
-		this.setCustomer(customer);
-		
-		this.tickets = new ArrayList<>();
-		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++) {
-			Ticket nTicket = new Ticket(ticket);
-			nTicket.setSeat(ticket.getFlight().findSeat());
-			this.tickets.add(new Ticket(nTicket));
-		}
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		try {
-			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	public Sale() {
 	}
 
 	public String getCode() {
@@ -101,48 +75,79 @@ public class Sale {
 	public void setTicket(Ticket ticket) {
 		this.tickets.add(ticket);
 	}
-	
-	public void changeSale(Ticket ticket, int quantity) throws Exception{
-		
+
+	public void getSale(String code, int quantity, Ticket ticket) {
+
+		this.code = code;
+
+		this.quantity = quantity;
 		int baseQ = 1;
 		if (baseQ >= quantity)
-			quantity = baseQ;
-		
-		double newTotPrice = ticket.getFlight().getPrice() * quantity;
-		System.out.println(newTotPrice);
-		if(this.totPrice < newTotPrice)
-			throw new Exception();
-		
-		for (int i = 0; i < this.quantity; i++) {
-			int seat = this.getTicket(i).getSeat();
-			this.getTicket(i).getFlight().setSeats(seat, false);
-		}
-		
-		this.quantity = quantity;
-		
-		this.totPrice = newTotPrice;
-		
+			this.quantity = baseQ;
+
+		this.totPrice = ticket.getFlight().getPrice() * this.quantity;
+
 		this.tickets = new ArrayList<>();
 		for (int i = 0; i < this.quantity; i++) {
-			Ticket nTicket = new Ticket(ticket);
-			nTicket.setSeat(ticket.getFlight().findSeat());
-			this.tickets.add(new Ticket(nTicket));
+			Ticket nTicket = new Ticket();
+			nTicket.cloneTicket(ticket);
+			this.tickets.add(nTicket);
+		}
+	}
+	
+	public void confirmSale(Customer customer, String[] names, String[] surnames) {
+		
+		this.setCustomer(customer);
+		
+		for(int i = 0; i < this.quantity; i++) {
+			Ticket ticket = this.getTicket(i);
+			ticket.setSeat(ticket.getFlight().findSeat());
+			ticket.setHolderName(names[i]);
+			ticket.setHolderSurname(surnames[i]);
 		}
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		try {
-			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
+		try { 
+			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis()))); 
+		} catch (ParseException e) { 
+			e.printStackTrace(); 
+		} 
 	}
+
+	/*
+	 * public void changeSale(Ticket ticket, int quantity) {
+	 * 
+	 * int baseQ = 1; if (baseQ >= quantity) quantity = baseQ;
+	 * 
+	 * double newTotPrice = ticket.getFlight().getPrice() * quantity;
+	 * System.out.println(newTotPrice);
+	 * 
+	 * for (int i = 0; i < this.quantity; i++) { int seat =
+	 * this.getTicket(i).getSeat(); this.getTicket(i).getFlight().setSeats(seat,
+	 * false); }
+	 * 
+	 * this.quantity = quantity;
+	 * 
+	 * this.totPrice = newTotPrice;
+	 * 
+	 * this.tickets = new ArrayList<>(); for (int i = 0; i < this.quantity; i++) {
+	 * Ticket nTicket = new Ticket(ticket);
+	 * nTicket.setSeat(ticket.getFlight().findSeat()); this.tickets.add(new
+	 * Ticket(nTicket)); }
+	 * 
+	 * SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+	 * sdf.setTimeZone(TimeZone.getTimeZone("UTC")); try { this.saleDate =
+	 * sdf.parse(sdf.format(new Date(System.currentTimeMillis()))); } catch
+	 * (ParseException e) { e.printStackTrace(); }
+	 * 
+	 * this.toString(); }
+	 */
 
 	@Override
 	public String toString() {
 		String ticket = "";
-		for(int i = 0; i < quantity; i++)
+		for (int i = 0; i < quantity; i++)
 			ticket = ticket + tickets.get(i).toString();
 		return "Sale [code=" + code + ", quantity=" + quantity + ", totPrice=" + totPrice + ", saleDate=" + saleDate
 				+ ", ticket=" + ticket + "]";
@@ -173,69 +178,44 @@ public class Sale {
 
 	public static String ticketFromJson(String jsonString) {
 		String[] sub = jsonString.split("ticket\":");
-		int finalIndex = sub[1].lastIndexOf("]")+1;
+		int finalIndex = sub[1].lastIndexOf("]") + 1;
 		return sub[1].substring(0, finalIndex);
 	}
-	
+
 	/*
-	public Sale(String jsonString) {
-		super();
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		Sale sale = gson.fromJson(jsonString, Sale.class);
-		this.code = sale.getCode();
-		this.quantity = sale.getQuantity();
-		this.totPrice = sale.getTotPrice();
-		this.saleDate = sale.getSaleDate();
-		String ticketString = ticketFromJson(jsonString);
-		/*
-		gson = new Gson();
-		List<Ticket> tickets = gson.fromJson(ticketString, new TypeToken<ArrayList<Ticket>>(){}.getType());
-		sale.setTicket(tickets);
-		//System.out.println(sale.getTicket(0));
-		//System.out.println(sale.getTicket(1));
-		 
-	} 
-*/
-	
-	/*{"code":"AAA",
-	 * "links":
-	 * [
-	 *   {"params": {"rel":"self","title":"sale","type":"POST"},
-	 *   "rel":"self",
-	 *   "rels":["self"],
-	 *   "title":"sale",
-	 *   "type":"POST",
-	 *   "uri":"http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
-	 *   "uriBuilder":{"absolute":true}},
-	 *   
-	 *   {"params":{"rel":"next","title":"sale","type":"PUT"},
-	 *   "rel":"next",
-	 *   "rels":["next"],
-	 *   "title":"sale",
-	 *   "type":"PUT",
-	 *   "uri":"http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
-	 *   "uriBuilder":{"absolute":true}}
-	 * ],
-	 * "quantity":2,
-	 * "saleDate":"2020-02-28T03:11:00Z[UTC]",
-	 * "ticket":
-	 * [
-	 *   {"arrivalAirport":"Milano",
-	 *   "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
-	 *   "code":"C10001",
-	 *   "departureAirport":"Roma",
-	 *   "departureTime":"0016-04-09T13:10:00Z[UTC]",
-	 *   "price":20.0,
-	 *   "seat":0},
-	 *   
-	 *   {"arrivalAirport":"Milano",
-	 *   "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
-	 *   "code":"C10001",
-	 *   "departureAirport":"Roma",
-	 *   "departureTime":"0016-04-09T13:10:00Z[UTC]",
-	 *   "price":20.0,
-	 *   "seat":0}
-	 *   ],
-	 *    "totPrice":40.0}*/
+	 * public Sale(String jsonString) { super(); Gson gson = new
+	 * GsonBuilder().excludeFieldsWithoutExposeAnnotation().create(); Sale sale =
+	 * gson.fromJson(jsonString, Sale.class); this.code = sale.getCode();
+	 * this.quantity = sale.getQuantity(); this.totPrice = sale.getTotPrice();
+	 * this.saleDate = sale.getSaleDate(); String ticketString =
+	 * ticketFromJson(jsonString); /* gson = new Gson(); List<Ticket> tickets =
+	 * gson.fromJson(ticketString, new TypeToken<ArrayList<Ticket>>(){}.getType());
+	 * sale.setTicket(tickets); //System.out.println(sale.getTicket(0));
+	 * //System.out.println(sale.getTicket(1));
+	 * 
+	 * }
+	 */
+
+	/*
+	 * {"code":"AAA", "links": [ {"params":
+	 * {"rel":"self","title":"sale","type":"POST"}, "rel":"self", "rels":["self"],
+	 * "title":"sale", "type":"POST", "uri":
+	 * "http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
+	 * "uriBuilder":{"absolute":true}},
+	 * 
+	 * {"params":{"rel":"next","title":"sale","type":"PUT"}, "rel":"next",
+	 * "rels":["next"], "title":"sale", "type":"PUT", "uri":
+	 * "http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
+	 * "uriBuilder":{"absolute":true}} ], "quantity":2,
+	 * "saleDate":"2020-02-28T03:11:00Z[UTC]", "ticket": [
+	 * {"arrivalAirport":"Milano", "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
+	 * "code":"C10001", "departureAirport":"Roma",
+	 * "departureTime":"0016-04-09T13:10:00Z[UTC]", "price":20.0, "seat":0},
+	 * 
+	 * {"arrivalAirport":"Milano", "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
+	 * "code":"C10001", "departureAirport":"Roma",
+	 * "departureTime":"0016-04-09T13:10:00Z[UTC]", "price":20.0, "seat":0} ],
+	 * "totPrice":40.0}
+	 */
 
 }

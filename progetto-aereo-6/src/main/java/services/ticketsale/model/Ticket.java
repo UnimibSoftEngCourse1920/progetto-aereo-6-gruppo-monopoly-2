@@ -3,16 +3,15 @@ package services.ticketsale.model;
 public class Ticket {
 	private Flight flight;
 	private int seat;
+	private String holderName;
+	private String holderSurname;
 	
 	public Ticket(Flight flight) {
 		super();
 		this.flight = flight;
 	}
-	
-	public Ticket(Ticket ticket) {
-		super();
-		this.flight = ticket.getFlight();
-		this.seat = ticket.getSeat();
+
+	public Ticket() {
 	}
 
 	public Flight getFlight() {
@@ -31,9 +30,33 @@ public class Ticket {
 		this.seat = seat;
 	}
 	
+	public String getHolderName() {
+		return holderName;
+	}
+
+	public void setHolderName(String holderName) {
+		this.holderName = holderName;
+	}
+
+	public String getHolderSurname() {
+		return holderSurname;
+	}
+
+	public void setHolderSurname(String holderSurname) {
+		this.holderSurname = holderSurname;
+	}
+	
+	public void cloneTicket(Ticket ticket) {
+		this.flight = ticket.getFlight();
+		this.seat = ticket.getSeat();
+		this.holderName = ticket.getHolderName();
+		this.holderSurname = ticket.getHolderSurname();
+	}
+	
 	@Override
 	public String toString() {
-		return "Ticket [flight=" + flight + ", seat=" + seat + "]";
+		return "Ticket [flight=" + flight + ", seat=" + seat 
+				+ ", holderName=" + holderName + ", holderSurname=" + holderSurname + "]";
 	}
 
 	@Override

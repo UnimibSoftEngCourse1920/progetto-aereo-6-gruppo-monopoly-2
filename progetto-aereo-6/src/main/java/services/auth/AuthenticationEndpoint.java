@@ -32,7 +32,7 @@ public class AuthenticationEndpoint {
 	private String authenticate(String username, String password) throws Exception {
 		User user = UserRepository.getInstance().find(username);
 		if(!password.equals(user.getPassword())) throw new Exception();
-		String token = "RANDOMTOKEN";
+		String token = username+"@RANDOMTOKEN";
 		user.setToken(token);
 		return token;
 	}

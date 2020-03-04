@@ -14,18 +14,33 @@ public class DtoSale {
 	private int quantity;
 	private double totPrice;
 	private String saleDate;
+	private String[] ticketHolderNames;
+	private String[] ticketHolderSurnames;
 	@JsonIgnore
 	private List<Link> links;
 	
 	public DtoSale() {}
 	
-	public DtoSale(Sale sale) {
-		super();
+	public void newSale(Sale sale) {
+		
 		this.code = sale.getCode();
 		this.quantity=sale.getQuantity();
 		this.totPrice=sale.getTotPrice();
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-		this.saleDate = sdf.format(sale.getSaleDate());
+		if(sale.getSaleDate() == null)
+			this.saleDate = "";
+		else
+			this.saleDate = sdf.format(sale.getSaleDate());
+		
+		this.ticketHolderNames = new String[this.quantity];
+		this.ticketHolderSurnames = new String[this.quantity];
+		
+		for(int i = 0; i < this.quantity; i++) {
+			this.ticketHolderNames[i] = "";
+			this.ticketHolderSurnames[i] = "";
+		}
+		
 	}
 
 	public String getCode() {
@@ -66,5 +81,21 @@ public class DtoSale {
 
 	public void setLinks(List<Link> links) {
 		this.links = links;
+	}
+	
+	public String[] getTicketHolderNames() {
+		return ticketHolderNames;
+	}
+
+	public void setTicketHolderNames(String[] ticketHolderNames) {
+		this.ticketHolderNames = ticketHolderNames;
+	}
+
+	public String[] getTicketHolderSurnames() {
+		return ticketHolderSurnames;
+	}
+
+	public void setTicketHolderSurnames(String[] ticketHolderSurnames) {
+		this.ticketHolderSurnames = ticketHolderSurnames;
 	}
 }

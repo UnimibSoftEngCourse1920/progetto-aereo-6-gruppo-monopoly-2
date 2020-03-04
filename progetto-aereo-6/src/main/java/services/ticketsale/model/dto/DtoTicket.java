@@ -7,7 +7,6 @@ import javax.ws.rs.core.Link;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import services.ticketsale.model.Flight;
 import services.ticketsale.model.Ticket;
 
 public class DtoTicket {
@@ -18,21 +17,12 @@ public class DtoTicket {
 	private String arrivalTime;
 	private double price;
 	private int seat;
+	private String holderName;
+	private String holderSurname;
 	@JsonIgnore
 	private List<Link> links;
 	
 	public DtoTicket() {}
-	
-	public DtoTicket(DtoTicket ticket) {
-		super();
-		this.code = ticket.getCode();
-		this.departureAirport = ticket.getDepartureAirport();
-		this.arrivalAirport = ticket.getArrivalAirport();
-		this.departureTime = ticket.getDepartureTime();
-		this.arrivalTime = ticket.getArrivalTime();
-		this.price = ticket.getPrice();
-		this.seat = ticket.getSeat();
-	}
 	
 	public DtoTicket(Ticket ticket) {
 		super();
@@ -44,17 +34,16 @@ public class DtoTicket {
 		this.arrivalTime = sdf.format(ticket.getFlight().getArrivalTime());
 		this.price = ticket.getFlight().getPrice();
 		this.seat = ticket.getSeat();
-	}
-	
-	public DtoTicket(Flight flight) {
-		this.code = flight.getCode();
-		this.departureAirport = flight.getDepartureAirport();
-		this.arrivalAirport = flight.getArrivalAirport();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-		this.departureTime = sdf.format(flight.getDepartureTime());
-		this.arrivalTime = sdf.format(flight.getArrivalTime());
-		this.price = flight.getPrice();
-		this.seat = 0;
+		
+		if(ticket.getHolderName() == null)
+			this.holderName = "";
+		else
+			this.holderName = ticket.getHolderName();
+		
+		if(ticket.getHolderSurname() == null)
+			this.holderSurname =  "";
+		else
+			this.holderSurname = ticket.getHolderSurname();
 	}
 
 	public String getCode() {
@@ -111,6 +100,22 @@ public class DtoTicket {
 
 	public void setSeat(int seat) {
 		this.seat = seat;
+	}
+
+	public String getHolderName() {
+		return holderName;
+	}
+
+	public void setHolderName(String holderName) {
+		this.holderName = holderName;
+	}
+
+	public String getHolderSurname() {
+		return holderSurname;
+	}
+
+	public void setHolderSurname(String holderSurname) {
+		this.holderSurname = holderSurname;
 	}
 
 	public List<Link> getLinks() {
