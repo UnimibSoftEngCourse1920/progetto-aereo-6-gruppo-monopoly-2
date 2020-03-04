@@ -30,7 +30,7 @@ public class Sale {
 		
 		this.setCustomer(customer);
 		
-		tickets = new ArrayList<>();
+		this.tickets = new ArrayList<>();
 		for (int ticketsQ = 0; ticketsQ < this.quantity; ticketsQ++) {
 			Ticket nTicket = new Ticket(ticket);
 			nTicket.setSeat(ticket.getFlight().findSeat());
@@ -100,6 +100,43 @@ public class Sale {
 
 	public void setTicket(Ticket ticket) {
 		this.tickets.add(ticket);
+	}
+	
+	public void changeSale(Ticket ticket, int quantity) throws Exception{
+		
+		int baseQ = 1;
+		if (baseQ >= quantity)
+			quantity = baseQ;
+		
+		double newTotPrice = ticket.getFlight().getPrice() * quantity;
+		System.out.println(newTotPrice);
+		if(this.totPrice < newTotPrice)
+			throw new Exception();
+		
+		for (int i = 0; i < this.quantity; i++) {
+			int seat = this.getTicket(i).getSeat();
+			this.getTicket(i).getFlight().setSeats(seat, false);
+		}
+		
+		this.quantity = quantity;
+		
+		this.totPrice = newTotPrice;
+		
+		this.tickets = new ArrayList<>();
+		for (int i = 0; i < this.quantity; i++) {
+			Ticket nTicket = new Ticket(ticket);
+			nTicket.setSeat(ticket.getFlight().findSeat());
+			this.tickets.add(new Ticket(nTicket));
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		try {
+			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
