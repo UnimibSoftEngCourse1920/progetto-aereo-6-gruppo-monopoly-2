@@ -13,8 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
@@ -40,55 +38,53 @@ public class SaleController {
 
 	@Context
 	UriInfo uriInfo;
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSale(@PathParam("code") String code,
-			@QueryParam("quantity") int quantity) {
-		
+	public Response getSale(@PathParam("code") String code, @QueryParam("quantity") int quantity) {
+
 		Flight flight = FlightRepository.getInstance().find(code);
 		Ticket ticket = new Ticket(flight);
-		
+
 		Sale sale = new Sale();
 		sale.getSale("UUIDCODE", quantity, ticket);
 		SaleRepository.getInstance().save(sale);
-		
+
 		Link self = Link.fromUri(uriInfo.getAbsolutePath())
 				.title("sale")
 				.rel("self")
 				.type("GET")
 				.build();
-		
+
 		Link confirm = Link.fromUri(uriInfo.getAbsolutePath())
 				.title("sale")
 				.rel("confirm")
 				.type("POST")
 				.build();
-		
+
 		Link change = Link.fromUri(uriInfo.getAbsolutePath())
 				.title("sale")
 				.rel("change")
 				.type("PUT")
 				.build();
-		
+
 		DtoSale resSale = new DtoSale();
 		resSale.newSale(sale);
-		
-		List<Link> links = new ArrayList<>(); 
+
+		List<Link> links = new ArrayList<>();
 		links.add(self);
 		links.add(confirm);
 		links.add(change);
 		resSale.setLinks(links);
-		
+
 		return Response.ok(resSale).links(self, confirm, change).build();
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response postSale(@HeaderParam("Authorization") String token,
-			String jsonDtoSale) {
-		
+	public Response postSale(@HeaderParam("Authorization") String token, String jsonDtoSale) {
+
 		ObjectMapper mapper = new ObjectMapper();
 		DtoSale reqSale = null;
 		try {
@@ -98,72 +94,89 @@ public class SaleController {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
+
 		String username = token.replaceFirst("Bearer ", "");
 		Customer customer = CustomerRepository.getInstance().find(username);
-		
+
 		Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
-		
 		sale.confirmSale(customer, reqSale.getTicketHolderNames(), reqSale.getTicketHolderSurnames());
-		
+
 		Link self = Link.fromUri(uriInfo.getAbsolutePath())
 				.title("sale")
 				.rel("self")
 				.type("POST")
 				.build();
-		
+
 		DtoSale resSale = new DtoSale();
 		resSale.newSale(sale);
-		
-		List<Link> links = new ArrayList<>(); 
+
+		List<Link> links = new ArrayList<>();
 		links.add(self);
 		resSale.setLinks(links);
 
 		return Response.ok(resSale).links(self).build();
 	}
-	/*
+
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response putSale(@PathParam("code") String code,
-			String jsonDtoSale) {
-		
-		System.out.println(quantity);
+	public Response putSale(@PathParam("code") String code, String jsonDtoSale, @FormParam("quantity") int quantity) {
+
 		Flight flight = FlightRepository.getInstance().find(code);
 		Ticket ticket = new Ticket(flight);
-		System.out.println(ticket);
-		Sale sale = SaleRepository.getInstance().find(salecode);
+
+		ObjectMapper mapper = new ObjectMapper();
+		DtoSale reqSale = null;
+		try {
+			reqSale = mapper.readValue(jsonDtoSale, DtoSale.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
+		try {
+			sale.changeSale(quantity, ticket, reqSale.getTicketHolderNames(), reqSale.getTicketHolderSurnames());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		System.out.println(sale);
-		sale.changeSale(ticket, quantity);
-		System.out.println(sale);
-		DtoSale resSale = new DtoSale(sale);
-		return Response.ok(resSale).build();
 
-	}*/
+		Link self = Link.fromUri(uriInfo.getAbsolutePath())
+				.title("sale")
+				.rel("self")
+				.type("PUT")
+				.build();
 
-	
-	/* parse JSON
-	ObjectMapper mapper = new ObjectMapper();
+		DtoSale resSale = new DtoSale();
+		resSale.newSale(sale);
 
-	DtoSale reqSale = null;
-	try {
-		reqSale = mapper.readValue(jsonString, DtoSale.class);
-	} catch (JsonMappingException e) {
-		e.printStackTrace();
-	} catch (JsonProcessingException e) {
-		e.printStackTrace();
+		List<Link> links = new ArrayList<>();
+		links.add(self);
+		resSale.setLinks(links);
+
+		return Response.ok(resSale).links(self).build();
 	}
-	
-	Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
-	
-	DtoSale resSale = new DtoSale(sale);
-	
-	return Response.ok(resSale).build();
-	*/
-	
-	/** Funzioni non definitive per il PUT
-	 * private static void takeSeat(Sale sale) { for(int i = 0; i <
-	 * sale.getQuantity(); i++) { for(int j = 0; j <
+
+	/*
+	 * parse JSON ObjectMapper mapper = new ObjectMapper();
+	 * 
+	 * DtoSale reqSale = null; try { reqSale = mapper.readValue(jsonString,
+	 * DtoSale.class); } catch (JsonMappingException e) { e.printStackTrace(); }
+	 * catch (JsonProcessingException e) { e.printStackTrace(); }
+	 * 
+	 * Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
+	 * 
+	 * DtoSale resSale = new DtoSale(sale);
+	 * 
+	 * return Response.ok(resSale).build();
+	 */
+
+	/**
+	 * Funzioni non definitive per il PUT private static void takeSeat(Sale sale) {
+	 * for(int i = 0; i < sale.getQuantity(); i++) { for(int j = 0; j <
 	 * sale.getTicket(i).getFlight().getSeatsNumber(); j++) {
 	 * if(!sale.getTicket(i).getFlight().getSeats(j)) {
 	 * sale.getTicket(i).setSeat(j); sale.getTicket(i).getFlight().setSeats(j,

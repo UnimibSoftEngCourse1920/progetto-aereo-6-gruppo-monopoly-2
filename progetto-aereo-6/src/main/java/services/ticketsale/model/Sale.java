@@ -114,6 +114,45 @@ public class Sale {
 			e.printStackTrace(); 
 		} 
 	}
+	
+	public void changeSale(int quantity, Ticket ticket, String[] names, String[] surnames) throws Exception {
+		
+		int baseQ = 1; 
+		if (baseQ >= quantity) 
+			quantity = baseQ;
+		
+		double newTotPrice = ticket.getFlight().getPrice() * quantity;
+		
+		if(this.totPrice < newTotPrice) throw new Exception();
+		
+		for (int i = 0; i < this.quantity; i++) {
+			int seat = this.getTicket(i).getSeat();
+			this.getTicket(i).getFlight().setSeats(seat, false);
+		}
+		
+		this.quantity = quantity;
+		
+		this.totPrice = this.totPrice - newTotPrice;
+		
+		this.tickets = new ArrayList<>();
+		
+		for (int i = 0; i < this.quantity; i++) {
+			Ticket nTicket = new Ticket();
+			nTicket.cloneTicket(ticket);
+			nTicket.setSeat(ticket.getFlight().findSeat());
+			nTicket.setHolderName(names[i]);
+			nTicket.setHolderSurname(surnames[i]);
+			this.tickets.add(nTicket);
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		try { 
+			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis()))); 
+		} catch (ParseException e) { 
+			e.printStackTrace(); 
+		} 
+	}
 
 	/*
 	 * public void changeSale(Ticket ticket, int quantity) {
