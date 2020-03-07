@@ -2,25 +2,20 @@ package services.customer.model;
 
 import services.auth.model.User;
 
-public class Customer {
-	private User self;
+public class Customer extends User {
 	private String name;
 	private String surname;
+	private String email;
+	private int point;
 	private CreditCard creditcard;
 	
-	public Customer(User self, String name, String surname) {
-		super();
-		this.self = self;
+	public Customer() {}
+	
+	public void subscribe(String name, String surname, String email) {
 		this.name = name;
 		this.surname = surname;
-	}
-	
-	public User getSelf() {
-		return self;
-	}
-
-	public void setSelf(User self) {
-		this.self = self;
+		this.email = email;
+		this.point = 0;
 	}
 
 	public String getName() {
@@ -39,11 +34,33 @@ public class Customer {
 		this.surname = surname;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getPoint() {
+		return point;
+	}
+
+	public void setPoint(int point) {
+		this.point = point;
+	}
+	
 	public CreditCard getCreditcard() {
 		return creditcard;
 	}
 
 	public void setCreditcard(CreditCard creditcard) {
 		this.creditcard = creditcard;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [name=" + name + ", surname=" + surname + ", email=" + email + ", point=" + point
+				+ ", creditcard=" + creditcard + ", toString()=" + super.toString() + "]";
 	}
 }

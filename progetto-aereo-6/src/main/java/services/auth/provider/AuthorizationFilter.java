@@ -10,6 +10,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import services.auth.model.User;
+import services.auth.repository.UserRepository;
+
 @Provider
 @Secured
 @Priority(Priorities.AUTHORIZATION)
@@ -66,6 +69,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
     private void validateToken(String token) throws Exception {
-        if(!token.equals("RANDOMTOKEN")) throw new Exception();
+    	int i = token.indexOf("@");
+    	String username = token.substring(0, i);
+    	User user = UserRepository.getInstance().find(username);
+        if(!token.equals(user.getToken())) throw new Exception();
     }
 }

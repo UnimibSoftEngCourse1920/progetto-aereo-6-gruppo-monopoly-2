@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -62,27 +61,21 @@ public class SaleController {
 				.type("POST")
 				.build();
 
-		Link change = Link.fromUri(uriInfo.getAbsolutePath())
-				.title("sale")
-				.rel("change")
-				.type("PUT")
-				.build();
-
 		DtoSale resSale = new DtoSale();
 		resSale.newSale(sale);
 
 		List<Link> links = new ArrayList<>();
 		links.add(self);
 		links.add(confirm);
-		links.add(change);
 		resSale.setLinks(links);
 
-		return Response.ok(resSale).links(self, confirm, change).build();
+		return Response.ok(resSale).links(self, confirm).build();
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
 	public Response postSale(@HeaderParam("Authorization") String token, String jsonDtoSale) {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -95,7 +88,9 @@ public class SaleController {
 			e.printStackTrace();
 		}
 
-		String username = token.replaceFirst("Bearer ", "");
+		token = token.replaceFirst("Bearer ", "");
+		int i = token.indexOf("@");
+		String username = token.substring(0, i);
 		Customer customer = CustomerRepository.getInstance().find(username);
 
 		Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
@@ -120,7 +115,8 @@ public class SaleController {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response putSale(@PathParam("code") String code, String jsonDtoSale, @FormParam("quantity") int quantity) {
+	@Secured
+	public Response putSale(@PathParam("code") String code, String jsonDtoSale) {
 
 		Flight flight = FlightRepository.getInstance().find(code);
 		Ticket ticket = new Ticket(flight);
@@ -137,7 +133,7 @@ public class SaleController {
 
 		Sale sale = SaleRepository.getInstance().find(reqSale.getCode());
 		try {
-			sale.changeSale(quantity, ticket, reqSale.getTicketHolderNames(), reqSale.getTicketHolderSurnames());
+			sale.changeSale(reqSale.getQuantity(), ticket, reqSale.getTicketHolderNames(), reqSale.getTicketHolderSurnames());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

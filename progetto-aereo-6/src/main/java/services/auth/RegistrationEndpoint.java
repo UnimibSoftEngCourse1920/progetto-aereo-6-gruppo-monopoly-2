@@ -11,27 +11,32 @@ import javax.ws.rs.core.Response;
 import services.auth.model.User;
 import services.auth.repository.UserRepository;
 
-@Path("/authentication")
-public class AuthenticationEndpoint {
+@Path("/registration")
+public class RegistrationEndpoint {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password) {
+	public Response registerUser(@FormParam("username") String username, @FormParam("password") String password) {
 		try {
-			String token = authenticate(username, password);
+			String token = register(username, password);
 			return Response.ok(token).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 	}
 	
-	private String authenticate(String username, String password) throws Exception {
+	private String register(String username, String password) throws Exception {
 		User user = UserRepository.getInstance().find(username);
-		if(!password.equals(user.getPassword())) throw new Exception();
-		String token = username+"@RANDOMTOKEN";
-		user.setToken(token);
-		return token;
+		if(user != null) throw new Exception();
+		
+		user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setToken(username + "@RANDOMTOKEN");
+		UserRepository.getInstance().save(user);
+		
+		return user.getToken();
 	}
 
 }
