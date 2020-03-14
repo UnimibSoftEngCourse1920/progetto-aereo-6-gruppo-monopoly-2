@@ -1,0 +1,132 @@
+﻿
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>Aereoporto 6</title>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="assets/css/main.css" />
+<noscript>
+	<link rel="stylesheet" href="assets/css/noscript.css" />
+</noscript>
+</head>
+<body onload="loadJSON()">
+	<!-- Wrapper -->
+	<div id="wrapper">
+		<!-- Header -->
+		<header id="header">
+			<div class="logo">
+				<span class="icon fa-gem"></span>
+			</div>
+			<div class="content">
+				<div class="inner">
+					<h1>AEREOPORTO 6</h1>
+					<p>acquisto e prenotazione biglietti aerei</p>
+				</div>
+			</div>
+			<nav>
+				<ul>
+					<li><a href="#proposte">Proposte</a></li>
+					<li><a href="ricercavoli.html">Ricerca</a></li>
+					<li><a href="#login">Login</a></li>
+				</ul>
+			</nav>
+		</header>
+		<!-- Main -->
+		<div id="main">
+
+			<!-- proposte -->
+			<article id="proposte">
+				<h2 class="major">Proposte</h2>
+				<section>
+					<h3 class="major">
+						Voli disponibili <a href="ricercavoli.html">Ricerca
+							approfondita</a>
+					</h3>
+
+					<div class="tabella-ticket" id="tabellaProposte">
+						
+					</div>
+				</section>
+			</article>
+			<!-- login -->
+			<article id="login">
+				<h2 class="major">Login</h2>
+
+
+				<section>
+					<h3 class="major">Form</h3>
+					<form method="post" action="login.html" onclick="convalida()">
+						<div class="fields">
+							<div class="field half">
+								<label for="name">Name</label> <input type="text"
+									name="name" id="name" value="" placeholder="Jane Doe" />
+							</div>
+							<div class="field half">
+								<label for="password">Password</label> <input type="password"
+									name="password" id="password" value=""
+									placeholder="password" />
+							</div>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="Send Message"
+								class="primary" /></li>
+							<li><input type="reset" value="Reset" /></li>
+							<li><a href="#registrazione"><input type="button" value="Registrazione" /></a></li>
+							
+						</ul>
+					</form>
+				</section>
+
+			</article>
+
+			<article id="registrazione">
+				<h2 class="major">Registrazione</h2>
+
+
+				<section>
+					<h3 class="major">Form</h3>
+					<form method="post" action="login.html" onclick="registrazione()">
+						<div class="fields">
+							<div class="field half">
+								<label for="name">Name</label> <input type="text"
+									name="name" id="name" value="" placeholder="Jane Doe" />
+							</div>
+							<div class="field half">
+								<label for="password">Password</label> <input type="password"
+									name="password" id="password" value=""
+									placeholder="password" />
+							</div>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="Send Message"
+								class="primary" /></li>
+							<li><input type="reset" value="Reset" /></li>
+							
+						</ul>
+					</form>
+				</section>
+
+			</article>
+			
+
+
+		</div>
+
+	</div>
+
+	<!-- BG -->
+	<div id="bg"></div>
+
+	<!-- Scripts -->
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+</html>
