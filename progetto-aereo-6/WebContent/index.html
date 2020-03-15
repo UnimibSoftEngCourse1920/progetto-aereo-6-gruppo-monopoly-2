@@ -8,9 +8,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="assets/css/main.css" />
-<noscript>
-	<link rel="stylesheet" href="assets/css/noscript.css" />
-</noscript>
+<link rel="stylesheet" href="assets/css/noscript.css" />
 </head>
 <body onload="loadJSON()">
 	<!-- Wrapper -->
@@ -55,28 +53,15 @@
 			<article id="login">
 				<h2 class="major">Login</h2>
 
-
 				<section>
-					<h3 class="major">Form</h3>
-					<form method="post" action="login.html" onclick="convalida()">
-						<div class="fields">
-							<div class="field half">
-								<label for="name">Username</label> <input type="text"
-									name="name" id="name" value="" placeholder="Jane Doe" />
-							</div>
-							<div class="field half">
-								<label for="password">Password</label> <input type="password"
-									name="password" id="password" value=""
-									placeholder="password" />
-							</div>
-						</div>
-						<ul class="actions">
-							<li><input type="submit" value="Invia"
-								class="primary" /></li>
-							<li><input type="reset" value="Reset" /></li>
-							<li><a href="#registrazione"><input type="button" value="Registrazione" /></a></li>
-							
-						</ul>
+					<h3 class="major">Per favore fai il login prima di continuare</h3>
+					<form method="post" name="login" action="login.html">
+						 Token<input type="text" name="token"> 
+							Password<input type="password"name="password">
+						<br>
+						<input type="button"
+							value="Invia" onClick="convalida()">
+							<a href="#registrazione"><input type="button" value="Registrazione"></a>
 					</form>
 				</section>
 
@@ -85,34 +70,31 @@
 			<article id="registrazione">
 				<h2 class="major">Registrazione</h2>
 
-
 				<section>
-					<h3 class="major">Form</h3>
-					<form method="post" action="login.html" onclick="registrazione()">
-						<div class="fields">
-							<div class="field half">
-								<label for="name">Name</label> <input type="text"
-									name="name" id="name" value="" placeholder="Jane Doe" />
-							</div>
-							<div class="field half">
-								<label for="password">Password</label> <input type="password"
-									name="password" id="password" value=""
-									placeholder="password" />
-							</div>
-						</div>
-						<ul class="actions">
-							<li><input type="submit" value="Send Message"
-								class="primary" /></li>
-							<li><input type="reset" value="Reset" /></li>
-							
-						</ul>
+					<h3 class="major">form</h3>
+					<form method="post" name="modulo" action="login.html">
+						Nome<input type="text" name="nome"> Cognome<input
+							type="text" name="cognome"> Nickname<input type="text"
+							name="nickname"> Password<input type="password"
+							name="password"> Conferma password<input type="password"
+							name="conferma"> Data di nascita (es: 12/04/1978)
+							<input type="text" name="nascita"> 
+							Città <select name="citta">
+							<option>- Seleziona la tua città -</option>
+							<option value="Roma">Roma</option>
+							<option value="Milano">Milano</option>
+							<option value="Napoli">Napoli</option>
+							<option value="Firenze">Firenze</option>
+							<option value="Bologna">Bologna</option>
+						</select> Indirizzo<input type="text" name="indirizzo"> Telefono
+						(senza spazi nè simboli)<input type="text" name="telefono">
+						Email<input type="text" name="email"> 
+						<br>
+						<input type="button"
+							value="Invia" onClick="registrazione()">
 					</form>
 				</section>
-
 			</article>
-			
-
-
 		</div>
 
 	</div>

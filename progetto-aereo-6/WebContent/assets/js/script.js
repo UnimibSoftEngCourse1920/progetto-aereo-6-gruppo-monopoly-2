@@ -28,14 +28,13 @@ function creaTabella(jsonObj){
 	"<th>Aeroporto di Arrivo</th>" +
 	"<th>orarioP</th>" +
 	"<th>Prezzo</th>" +
-	"<th>Posti</th>"+
 	"<th>Prenota</th>"+
 	"<th>Acquista</th>"+"</tr>";
 	
 	for(x in jsonObj){
 		var item=jsonObj[x];
-		var prenotazione="<a href='#login'><input type='button' onclick='pagamento(item)' value='prenota' class='primary'/></a>";
-		var acquisto="<a href='#login'><input type='button' onclick='pagamento(item)' value='acquista' class='primary'/></a>";
+		var prenotazione="<a href='#login'><input type='button' value='prenota' class='primary'/></a>";
+		var acquisto="<a href='#login'><input type='button' value='acquista' class='primary'/></a>";
 		table += "<tr><td>" +
 		item.code +
 		"</td><td>" +
@@ -47,8 +46,6 @@ function creaTabella(jsonObj){
 		"</td><td>" +
 		item.price+
 		"</td><td>" +
-		item.seat+
-		"</td><td>" +
 		prenotazione+
 		"</td><td>" +
 		acquisto
@@ -58,6 +55,7 @@ function creaTabella(jsonObj){
 }
 
 function pagamento(item){
+	
 	var dataFile ="http://localhost:8080/progetto-aereo-6/ticketsale/tickets/'item.code'/sale";
 	var xhttp;
 	var table;
@@ -104,14 +102,13 @@ function ricercaPartenza(airport){
 	xhttp.send();
 }
 function ricercaTabella(jsonObj,airport){
-	var prenotazione="<a href='login.html'><input type='button' value='prenota' class='primary'/></a>";
-	var acquisto="<a href='login.html'><input type='button' value='acquista' class='primary'/></a>";
+	var prenotazione="<a href='#login'><input type='button' value='prenota' class='primary'/></a>";
+	var acquisto="<a href='#login'><input type='button' value='acquista' class='primary'/></a>";
 	var table="<table><tr><th>CodiceVolo</th>" +
 	"<th>Aeroporto di partenza</th>" +
 	"<th>Aeroporto di destinazione</th>" +
 	"<th>orarioP</th>" +
 	"<th>Prezzo</th>" +
-	"<th>Posti</th>"+
 	"<th>Prenota</th>"+
 	"<th>Acquista</th>"+"</tr>";
 	for(x in jsonObj){
@@ -127,8 +124,6 @@ function ricercaTabella(jsonObj,airport){
 		item.departureTime+
 		"</td><td>" +
 		item.price+
-		"</td><td>" +
-		item.seat+
 		"</td><td>" +
 		prenotazione+
 		"</td><td>" +
@@ -164,14 +159,13 @@ function ricercaDestinazione(airport){
 	xhttp.send();
 }
 function ricercaTabellaDestinazione(jsonObj,airport){
-	var prenotazione="<a href='login.html'><input type='button' value='prenota' class='primary'/></a>";
-	var acquisto="<a href='login.html'><input type='button' value='acquista' class='primary'/></a>";
+	var prenotazione="<a href='#login'><input type='button' value='prenota' class='primary'/></a>";
+	var acquisto="<a href='#login'><input type='button' value='acquista' class='primary'/></a>";
 	var table="<table><tr><th>CodiceVolo</th>" +
 	"<th>Aeroporto di partenza</th>" +
 	"<th>Aeroporto di destinazione</th>" +
 	"<th>orarioP</th>" +
 	"<th>Prezzo</th>" +
-	"<th>Posti</th>"+
 	"<th>Prenota</th>"+
 	"<th>Acquista</th>"+"</tr>";
 	
@@ -188,8 +182,6 @@ function ricercaTabellaDestinazione(jsonObj,airport){
 		item.departureTime+
 		"</td><td>" +
 		item.price+
-		"</td><td>" +
-		item.seat+
 		"</td><td>" +
 		prenotazione+
 		"</td><td>" +
@@ -219,13 +211,12 @@ function tabellaCliente(){
 }
 
 function creaTabellaCliente(){
-	var modifica="<a href='login.html'><input type='button' value='modifica' class='primary'/></a>";
-	var conferma="<a href='login.html'><input type='button' value='acquista' class='primary'/></a>";
+	var modifica="<a href='#login'><input type='button' value='modifica' class='primary'/></a>";
+	var conferma="<a href='#login'><input type='button' value='acquista' class='primary'/></a>";
 	var table="<table><tr><th>CodiceVolo</th>" +
 	"<th>Aeroporto</th>" +
 	"<th>orarioP</th>" +
 	"<th>Prezzo</th>" +
-	"<th>Posti</th>"+
 	"<th>Prenota</th>"+
 	"<th>Acquista</th>"+"</tr>";
 	
@@ -239,8 +230,6 @@ function creaTabellaCliente(){
 		item.departureTime+
 		"</td><td>" +
 		item.price+
-		"</td><td>" +
-		item.seat+
 		"</td><td>" +
 		conferma+
 		"</td><td>" +
@@ -256,17 +245,15 @@ function ricercaData(){
 	var form=document.forms["sceltaData"];
 	var data="";
 	console.log(form);
-	for(var i=0;i<form.lenght;i++){
-		data+=form[i].value  + "<br>";
-	}
-	console.log(data);
 	if(window.XMLHttpRequest){
 		xhttp=new XMLHttpRequest();
 	}else{
 		xhttp=new ActiceXObject("Microsoft.XMLHTTP");
 	}
 	xhttp.onreadystatechange=function(){
-		
+		for(var i=0;i<form.lenght;i++){
+			data+=form[i].childNodes[0].nodeValue;
+		}
 		if(this.readyState==4 && this.status==200){
 			var jsonObj=JSON.parse(xhttp.responseText);
 			table=ricercaTabellaData(jsonObj,data);
@@ -277,14 +264,13 @@ function ricercaData(){
 }
 
 function ricercaTabellaData(jsonObj,data){
-	var prenotazione="<a href='login.html'><input type='button' value='prenota' class='primary'/></a>";
-	var acquisto="<a href='login.html'><input type='button' value='acquista' class='primary'/></a>";
+	var prenotazione="<a href='#login'><input type='button' value='prenota' class='primary'/></a>";
+	var acquisto="<a href='#login'><input type='button' value='acquista' class='primary'/></a>";
 	var table="<table><tr><th>CodiceVolo</th>" +
 	"<th>Aeroporto di partenza</th>" +
 	"<th>Aeroporto di destinazione</th>" +
 	"<th>orarioP</th>" +
 	"<th>Prezzo</th>" +
-	"<th>Posti</th>"+
 	"<th>Prenota</th>"+
 	"<th>Acquista</th>"+"</tr>";
 	
@@ -302,8 +288,6 @@ function ricercaTabellaData(jsonObj,data){
 		"</td><td>" +
 		item.price+
 		"</td><td>" +
-		item.seat+
-		"</td><td>" +
 		prenotazione+
 		"</td><td>" +
 		acquisto
@@ -314,80 +298,143 @@ function ricercaTabellaData(jsonObj,data){
 }
 
 function convalida(){
-var username = document.getElementById("name");
-var password=document.getElementById("password");
-var errorBox=document.getElementById("errorMessage");
-var alertDiv='<div class="alert alert-danger alert-dismissible" role="alert">';
-var alertBtn='<buttom type="buttom" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></buttom>';
-if(username==null||username==""){
-	errorBox.innerHTML= alertDiv+ alertBtn+'<strong>Attento!</strong> hai dimenticato di inserire l\'username.'+"</div>"
-	username.focus();
-	username.style.border="3px solid #990033";
-	return false;
-}
+	var dataFile="http://localhost:8080/progetto-aereo-6/home";
+	var token = document.login.token.value;
+	var password = document.login.password.value;
 
-if(password==null||password==""){
-	errorBox.innerHTML= alertDiv+ alertBtn+'<strong>Attento!</strong> hai dimenticato di inserire la password.'+"</div>"
-	password.focus();
-	password.style.border="3px solid #990033";
-	return false;
-}
-if(password.value.length<8){
-	errorBox.innerHTML=alertDiv+alertBtn+'<strong>Attento!</strong> la password deve essere almeno  di 8 caratteri.'+"</div>"
-	password.focus();
-	password.style.border="3px solid #990033";
-	return false;
-}
-var cerca=cercaPersona(username,password);
-	if (cerca == true)
-		return true;
+//	Effettua il controllo sul campo TOKEN
+	if ((token == "") || (token == "undefined")) {
+		alert("Il campo Token è obbligatorio.");
+		document.login.token.focus();
+		return false;
+	}
+//	Effettua il controllo sul campo PASSWORD
+	else if ((password == "") || (password == "undefined")) {
+		alert("Il campo Password è obbligatorio.");
+		document.modulo.password.focus();
+		return false;
+	}
+//	INVIA IL MODULO
 	else {
-		errorBox.innerHTML = alertDiv + alertBtn + '<strong>Attento!</strong> non sei registrato!' + "</div>"
-		username.focus();
-		username.style.border = "3px solid #990033";
-		return false;
+		var cerca=cercaPersona();	
+		if(cerca==false){
+			document.modulo.submit();
+		}else{
+			alert("Attenzione! l'utente inserito è già registrato");
+		}
+
 	}
 }
-
 function registrazione() {
-	var username = document.getElementById("username");
-	var password = document.getElementById("password");
-	var email=document.getElementById("email");
-	var errorBox = document.getElementById("errorMessage");
-	var alertDiv = '<div class="alert alert-danger alert-dismissible" role="alert">';
-	var alertBtn = '<buttom type="buttom" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></buttom>';
-	if (username == null || username == "") {
-		errorBox.innerHTML = alertDiv + alertBtn + '<strong>Attento!</strong> hai dimenticato di inserire l\'username.' + "</div>"
-		username.focus();
-		username.style.border = "3px solid #990033";
+	var nome = document.modulo.nome.value;
+	var cognome = document.modulo.cognome.value;
+	var nickname = document.modulo.nickname.value;
+	var password = document.modulo.password.value;
+	var conferma = document.modulo.conferma.value;
+	var nascita = document.modulo.nascita.value;
+	var citta = document.modulo.citta.options[document.modulo.citta.selectedIndex].value;
+	var indirizzo = document.modulo.indirizzo.value;
+	var telefono = document.modulo.telefono.value;
+	var email = document.modulo.email.value;
+	// Espressione regolare dell'email
+	var email_reg_exp = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-]{2,})+.)+([a-zA-Z0-9]{2,})+$/;
+	//Effettua il controllo sul campo NOME
+	if ((nome == "") || (nome == "undefined")) {
+		alert("Il campo Nome è obbligatorio.");
+		document.modulo.nome.focus();
 		return false;
 	}
-	if (password == null || password == "") {
-		errorBox.innerHTML = alertDiv + alertBtn + '<strong>Attento!</strong> hai dimenticato di inserire la password.' + "</div>"
-		password.focus();
-		password.style.border = "3px solid #990033";
+	//Effettua il controllo sul campo COGNOME
+	else if ((cognome == "") || (cognome == "undefined")) {
+		alert("Il campo Cognome è obbligatorio.");
+		document.modulo.cognome.focus();
 		return false;
 	}
-	if (password.value.length < 8) {
-		errorBox.innerHTML = alertDiv + alertBtn + '<strong>Attento!</strong> la password deve essere almeno  di 8 caratteri.' + "</div>"
-		password.focus();
-		password.style.border = "3px solid #990033";
+	//Effettua il controllo sul campo NICKNAME
+	else if ((nickname == "") || (nickname == "undefined")) {
+		alert("Il campo Nickname è obbligatorio.");
+		document.modulo.nickname.focus();
 		return false;
 	}
-	if (email == null || email == "") {
-		errorBox.innerHTML = alertDiv + alertBtn + '<strong>Attento!</strong> hai dimenticato di inserire l\'username.' + "</div>"
-		email.focus();
-		email.style.border = "3px solid #990033";
+	//Effettua il controllo sul campo PASSWORD
+	else if ((password == "") || (password == "undefined")) {
+		alert("Il campo Password è obbligatorio.");
+		document.modulo.password.focus();
 		return false;
 	}
-	var reg=cercaRegistrazione();
-	if(reg==true){
-		errorBox.innerHTML = alertDiv + alertBtn + '<strong>Attento!</strong> non sei registrato!' + "</div>"
-		username.focus();
-		username.style.border = "3px solid #990033";
+	//Effettua il controllo sul campo CONFERMA PASSWORD
+	else if ((conferma == "") || (conferma == "undefined")) {
+		alert("Il campo Conferma password è obbligatorio.");
+		document.modulo.conferma.focus();
 		return false;
-	}else {
-		return true;
+	}
+	//Verifica l'uguaglianza tra i campi PASSWORD e CONFERMA PASSWORD
+	else if (password != conferma) {
+		alert("La password confermata è diversa da quella scelta, controllare.");
+		document.modulo.conferma.value = "";
+		document.modulo.conferma.focus();
+		return false;
+	}
+	//Effettua il controllo sul campo DATA DI NASCITA
+	else if (document.modulo.nascita.value.substring(2,3) != "/" ||
+			document.modulo.nascita.value.substring(5,6) != "/" ||
+			isNaN(document.modulo.nascita.value.substring(0,2)) ||
+			isNaN(document.modulo.nascita.value.substring(3,5)) ||
+			isNaN(document.modulo.nascita.value.substring(6,10))) {
+		alert("Inserire nascita in formato gg/mm/aaaa");
+		document.modulo.nascita.value = "";
+		document.modulo.nascita.focus();
+		return false;
+	}
+	else if (document.modulo.nascita.value.substring(0,2) > 31) {
+		alert("Impossibile utilizzare un valore superiore a 31 per i giorni");
+		document.modulo.nascita.select();
+		return false;
+	}
+	else if (document.modulo.nascita.value.substring(3,5) > 12) {
+		alert("Impossibile utilizzare un valore superiore a 12 per i mesi");
+		document.modulo.nascita.value = "";
+		document.modulo.nascita.focus();
+		return false;
+	}
+	else if (document.modulo.nascita.value.substring(6,10) < 1900) {
+		alert("Impossibile utilizzare un valore inferiore a 1900 per l'anno");
+		document.modulo.nascita.value = "";
+		document.modulo.nascita.focus();
+		return false;
+	}
+	//Effettua il controllo sul campo CITTA'
+	else if ((citta == "") || (citta == "undefined")) {
+		alert("Il campo Città è obbligatorio.");
+		document.modulo.citta.focus();
+		return false;
+	}
+	//Effettua il controllo sul campo INDIRIZZO
+	else if ((indirizzo == "") || (indirizzo == "undefined")) {
+		alert("Il campo Indirizzo è obbligatorio.");
+		document.modulo.indirizzo.focus();
+		return false;
+	}
+	//Effettua il controllo sul campo TELEFONO
+	else if ((isNaN(telefono)) || (telefono == "") || (telefono == "undefined")) {
+		alert("Il campo Telefono è numerico ed obbligatorio.");
+		document.modulo.telefono.value = "";
+		document.modulo.telefono.focus();
+		return false;
+	}
+	else if (!email_reg_exp.test(email) || (email == "") || (email == "undefined")) {
+		alert("Inserire un indirizzo email corretto.");
+		document.modulo.email.select();
+		return false;
+	}
+	//INVIA IL MODULO
+	else {
+		var cerca=cercaRegistrazione();	
+		if(cerca==false){
+			document.modulo.submit();
+		}else{
+			alert("Attenzione! l'utente inserito è già registrato");
+		}
 	}
 }
 function cercaPersona(username,password){
@@ -399,11 +446,10 @@ function cercaPersona(username,password){
 		xhttp=new ActiceXObject("Microsoft.XMLHTTP");
 	}
 	xhttp.onreadystatechange=function(){
-
 		if(this.readyState==4 && this.status==200){
 			var jsonObj=JSON.parse(xhttp.responseText);
 			for( x in jsonObj){
-				if(username==jsonObj[x].username && password==jsonObj[x].password){
+				if(username==jsonObj[x].username && password==jsonObj[x].password && email==jsonObj[x].email){
 					return true;
 				}
 			}
@@ -438,13 +484,8 @@ function cercaRegistrazione(username,password,email){
 	xhttp.send("username=val&password=val");
 }
 
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//gestione data
 
 //define variables per la data
 var nativePicker = document.querySelector('.nativeDateTimePicker');
@@ -587,9 +628,3 @@ var previousDay;
 daySelect.onchange = function() {
   previousDay = daySelect.value;
 }
-
-
-
-
-
-

@@ -6,7 +6,6 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="assets/css/main.css" />
-
 </head>
 <body class="is-preload">
 
@@ -54,8 +53,6 @@
 						</select>
 					</form>
 					<br>
-
-
 				</section>
 				<div class="tabella-ticket" id="tabellaRicercaAirport"></div>
 			</article>
@@ -140,6 +137,65 @@
 					<div class="tabella-ticket" id="tabellaRicercaData"></div>
 					<br>
 				</section>
+			</article>
+			
+			<article id="login">
+				<h2 class="major">Login</h2>
+
+
+				<section>
+					<h3 class="major">Form</h3>
+					<form method="post" action="login.html" onclick="convalida()">
+						<div class="fields">
+							<div class="field half">
+								<label for="name">Username</label> <input type="text"
+									name="name" id="name" value="" placeholder="Jane Doe" />
+							</div>
+							<div class="field half">
+								<label for="password">Password</label> <input type="password"
+									name="password" id="password" value=""
+									placeholder="password" />
+							</div>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="Invia"
+								class="primary" /></li>
+							<li><input type="reset" value="Reset" /></li>
+							<li><a href="#registrazione"><input type="button" value="Registrazione" /></a></li>
+							
+						</ul>
+					</form>
+				</section>
+
+			</article>
+
+			<article id="registrazione">
+				<h2 class="major">Registrazione</h2>
+
+
+				<section>
+					<h3 class="major">Form</h3>
+					<form method="post" action="login.html" onclick="registrazione()">
+						<div class="fields">
+							<div class="field half">
+								<label for="name">Name</label> <input type="text"
+									name="name" id="name" value="" placeholder="Jane Doe" />
+							</div>
+							<div class="field half">
+								<label for="password">Password</label> <input type="password"
+									name="password" id="password" value=""
+									placeholder="password" />
+							</div>
+						</div>
+						<ul class="actions">
+							<li><input type="submit" value="invia"
+								class="primary" /></li>
+							<li><input type="reset" value="Reset" /></li>
+							
+						</ul>
+					</form>
+				</section>
+
 			</article>
 			
 		</div>
