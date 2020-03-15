@@ -1,9 +1,17 @@
 package services.auth.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import services.customer.model.CreditCard;
+import services.ticketsale.model.Sale;
+
 public class User {
 	private String username;
 	private String password;
 	private String token;
+	private CreditCard creditcard;
+	private List<Sale> sales = new ArrayList<>();
 	
 	public User() {}
 	
@@ -26,9 +34,34 @@ public class User {
 		this.token = token;
 	}
 	
+	public CreditCard getCreditcard() {
+		return creditcard;
+	}
+
+	public void setCreditcard(CreditCard creditcard) {
+		this.creditcard = creditcard;
+	}
+
+	public List<Sale> getSales() {
+		return sales;
+	}
+
+	public void setSales(List<Sale> sales) {
+		this.sales = sales;
+	}
+	
+	public Sale getSales(int i) {
+		return sales.get(i);
+	}
+
+	public void setSales(Sale sale) {
+		this.sales.add(sale);
+	}
+
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", token=" + token + "]";
+		return "User [username=" + username + ", password=" + password + ", token=" + token + ", creditcard="
+				+ creditcard + ", sales=" + sales + "]";
 	}
 
 	@Override
@@ -53,5 +86,4 @@ public class User {
 			return false;
 		return true;
 	}
-
 }

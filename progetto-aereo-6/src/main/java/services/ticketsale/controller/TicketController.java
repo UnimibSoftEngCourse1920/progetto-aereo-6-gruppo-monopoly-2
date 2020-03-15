@@ -16,8 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import services.ticketsale.model.Flight;
-import services.ticketsale.model.Ticket;
-import services.ticketsale.model.dto.DtoTicket;
+import services.ticketsale.model.dto.DtoFlight;
 import services.ticketsale.repository.FlightRepository;
 
 /**
@@ -44,7 +43,6 @@ public class TicketController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTickets() {
-
 		// Generiamo un link self alla collezione di tickets.
 		// uriInfo.getAbsolutePath() =
 		// http://localhost:8080/progetto-aereo-6/ticketsale/tickets
@@ -56,27 +54,31 @@ public class TicketController {
 
 		// Accediamo al repository e prendiamo tutti i voloi in esso contenuti
 		Collection<Flight> flights = FlightRepository.getInstance().findAll();
-		List<DtoTicket> tickets = new ArrayList<>();
+		List<DtoFlight> dtoFlights = new ArrayList<>();
+
 
 		// Per ogni volo presente settiamo il link self al ticket e generiamo una lista di tickets
-		int i = 0;
 		for (Flight e : flights) {
+			
+			DtoFlight dtoFlight = new DtoFlight();
+			dtoFlight.buildDtoFlight(e);
+			
 			List<Link> links = new ArrayList<>();
-			tickets.add(new DtoTicket(new Ticket(e)));
 			links.add(Link.fromUri(uriInfo.getAbsolutePathBuilder().path(e.getCode()).build())
 					.title("ticket")
 					.rel("self")
 					.type("GET")
 					.build());
-			tickets.get(i).setLinks(links);
-			i++;
+			dtoFlight.setLinks(links);
+			
+			dtoFlights.add(dtoFlight);
 		}
 		// Ritorniamo la risposta:
 		// Response.ok setta automaticamente lo status code a 200
 		// ed accetta anche il payload, in questo caso la nostra lista di voli
 		// .links() accetta un numero infinito di parametri di tipo Link,
 		// essi vengono inseriti dell'header della risposta
-		return Response.ok(tickets).links(collection).build();
+		return Response.ok(dtoFlights).links(collection).build();
 	}
 
 	/**
@@ -96,7 +98,9 @@ public class TicketController {
 	public Response getTicket(@PathParam("code") String code) {
 		// Recuperiamo il volo grazie al repository
 		Flight flight = FlightRepository.getInstance().find(code);
-		DtoTicket ticket = new DtoTicket(new Ticket(flight));
+		
+		DtoFlight dtoFlight = new DtoFlight();
+		dtoFlight.buildDtoFlight(flight);
 		
 		// Generiamo i link self al ticket ed il link collection all'intera collezione
 		Link self = Link.fromUri(uriInfo.getAbsolutePath())
@@ -124,7 +128,7 @@ public class TicketController {
 		links.add(self);
 		links.add(collection);
 		links.add(next);
-		ticket.setLinks(links);
+		dtoFlight.setLinks(links);
 
 		// Ritorniamo la risposta:
 		// Response.ok setta automaticamente lo status code a 200
@@ -133,7 +137,7 @@ public class TicketController {
 		// essi vengono inseriti dell'header della risposta ma in questo caso
 		// sono anche presenti nel payload perchè sono stati aggiunti
 		// all'oggetto ticket
-		return Response.ok(ticket).links(self, collection, next).build();
+		return Response.ok(dtoFlight).links(self, collection, next).build();
 	}
 
 }

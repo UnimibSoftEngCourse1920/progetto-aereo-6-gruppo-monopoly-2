@@ -7,11 +7,13 @@ public class Customer extends User {
 	private String surname;
 	private String email;
 	private int point;
-	private CreditCard creditcard;
 	
 	public Customer() {}
 	
-	public void subscribe(String name, String surname, String email) {
+	public void subscribe(String name, String surname, String email) throws Exception {
+		if(!name.isEmpty()||name == null) throw new Exception();
+		if(!surname.isEmpty()||surname == null) throw new Exception();
+		if(!email.isEmpty()||email == null) throw new Exception();
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -49,18 +51,11 @@ public class Customer extends User {
 	public void setPoint(int point) {
 		this.point = point;
 	}
-	
-	public CreditCard getCreditcard() {
-		return creditcard;
-	}
-
-	public void setCreditcard(CreditCard creditcard) {
-		this.creditcard = creditcard;
-	}
 
 	@Override
 	public String toString() {
 		return "Customer [name=" + name + ", surname=" + surname + ", email=" + email + ", point=" + point
-				+ ", creditcard=" + creditcard + ", toString()=" + super.toString() + "]";
+				+ ", toString()=" + super.toString() + "]";
 	}
+
 }

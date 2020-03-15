@@ -6,23 +6,45 @@ import javax.ws.rs.core.Link;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import services.auth.model.User;
+import services.customer.model.Customer;
+
 public class DtoCustomer {
 	private String username;
 	private String name;
 	private String surname;
 	private String email;
 	private int point;
+	private String[] sales;
 	@JsonIgnore
 	private List<Link> links;
 	
 	public DtoCustomer() {}
 	
-	public void newCustomer(String username, String name, String surname, String email, int point) {
-		this.username = username;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.point = point;
+	public void createDtoCustomer(Customer customer) {
+		this.username = customer.getUsername();
+		this.name = customer.getName();
+		this.surname = customer.getSurname();
+		this.email = customer.getEmail();
+		this.point = customer.getPoint();
+		
+		sales = new String[customer.getSales().size()];
+		System.out.println(sales.length);
+		for(int i = 0; i < customer.getSales().size(); i++)
+			sales[i] = customer.getSales(i).getCode();
+	}
+	
+	public void createDtoCustomer(User customer) {
+		this.username = customer.getUsername();
+		this.name = "";
+		this.surname = "";
+		this.email = "";
+		this.point = 0;
+		
+		sales = new String[customer.getSales().size()];
+		System.out.println(sales.length);
+		for(int i = 0; i < customer.getSales().size(); i++)
+			sales[i] = customer.getSales(i).getCode();
 	}
 	
 	public String getUsername() {
@@ -65,6 +87,14 @@ public class DtoCustomer {
 		this.point = point;
 	}
 
+	public String[] getSales() {
+		return sales;
+	}
+
+	public void setSales(String[] sales) {
+		this.sales = sales;
+	}
+
 	public List<Link> getLinks() {
 		return links;
 	}
@@ -72,5 +102,4 @@ public class DtoCustomer {
 	public void setLinks(List<Link> links) {
 		this.links = links;
 	}
-
 }

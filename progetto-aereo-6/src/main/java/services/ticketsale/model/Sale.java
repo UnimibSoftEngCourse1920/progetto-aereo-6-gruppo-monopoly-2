@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import services.auth.model.User;
 import services.customer.model.Customer;
 
 public class Sale {
@@ -14,11 +15,11 @@ public class Sale {
 	private int quantity;
 	private double totPrice;
 	private Date saleDate;
-	private Customer customer;
+	private User customer;
+	private boolean paid;
 	private List<Ticket> tickets;
 
-	public Sale() {
-	}
+	public Sale() {}
 
 	public String getCode() {
 		return code;
@@ -52,31 +53,39 @@ public class Sale {
 		this.saleDate = saleDate;
 	}
 
-	public Customer getCustomer() {
+	public User getCustomer() {
 		return customer;
 	}
 
-	public void setCustomer(Customer customer) {
+	public void setCustomer(User customer) {
 		this.customer = customer;
 	}
 
-	public List<Ticket> getTicket() {
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
+	}
+
+	public List<Ticket> getTickets() {
 		return tickets;
 	}
 
-	public void setTicket(List<Ticket> tickets) {
+	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
 
-	public Ticket getTicket(int i) {
+	public Ticket getTickets(int i) {
 		return tickets.get(i);
 	}
 
-	public void setTicket(Ticket ticket) {
+	public void setTickets(Ticket ticket) {
 		this.tickets.add(ticket);
 	}
 
-	public void getSale(String code, int quantity, Ticket ticket) {
+	public void incompleteSale(String code, int quantity, Ticket ticket) {
 
 		this.code = code;
 
@@ -95,12 +104,17 @@ public class Sale {
 		}
 	}
 	
-	public void confirmSale(Customer customer, String[] names, String[] surnames) {
+	public void confirmSale(User customer, String[] names, String[] surnames) {
 		
 		this.setCustomer(customer);
 		
+		if(customer instanceof Customer) {
+			int point = ((Customer) customer).getPoint();
+			((Customer) customer).setPoint(point + (int)this.totPrice);
+		}
+		
 		for(int i = 0; i < this.quantity; i++) {
-			Ticket ticket = this.getTicket(i);
+			Ticket ticket = this.getTickets(i);
 			ticket.setSeat(ticket.getFlight().findSeat());
 			ticket.setHolderName(names[i]);
 			ticket.setHolderSurname(surnames[i]);
@@ -113,6 +127,8 @@ public class Sale {
 		} catch (ParseException e) { 
 			e.printStackTrace(); 
 		} 
+		
+		this.paid = true;
 	}
 	
 	public void changeSale(int quantity, Ticket ticket, String[] names, String[] surnames) throws Exception {
@@ -123,16 +139,16 @@ public class Sale {
 		
 		double newTotPrice = ticket.getFlight().getPrice() * quantity;
 		
-		if(this.totPrice < newTotPrice) throw new Exception();
+		if(this.totPrice > newTotPrice) throw new Exception();
 		
 		for (int i = 0; i < this.quantity; i++) {
-			int seat = this.getTicket(i).getSeat();
-			this.getTicket(i).getFlight().setSeats(seat, false);
+			int seat = this.getTickets(i).getSeat();
+			this.getTickets(i).getFlight().freeSeat(seat);;
 		}
 		
 		this.quantity = quantity;
 		
-		this.totPrice = this.totPrice - newTotPrice;
+		this.totPrice = newTotPrice - this.totPrice;
 		
 		this.tickets = new ArrayList<>();
 		
@@ -153,35 +169,6 @@ public class Sale {
 			e.printStackTrace(); 
 		} 
 	}
-
-	/*
-	 * public void changeSale(Ticket ticket, int quantity) {
-	 * 
-	 * int baseQ = 1; if (baseQ >= quantity) quantity = baseQ;
-	 * 
-	 * double newTotPrice = ticket.getFlight().getPrice() * quantity;
-	 * System.out.println(newTotPrice);
-	 * 
-	 * for (int i = 0; i < this.quantity; i++) { int seat =
-	 * this.getTicket(i).getSeat(); this.getTicket(i).getFlight().setSeats(seat,
-	 * false); }
-	 * 
-	 * this.quantity = quantity;
-	 * 
-	 * this.totPrice = newTotPrice;
-	 * 
-	 * this.tickets = new ArrayList<>(); for (int i = 0; i < this.quantity; i++) {
-	 * Ticket nTicket = new Ticket(ticket);
-	 * nTicket.setSeat(ticket.getFlight().findSeat()); this.tickets.add(new
-	 * Ticket(nTicket)); }
-	 * 
-	 * SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-	 * sdf.setTimeZone(TimeZone.getTimeZone("UTC")); try { this.saleDate =
-	 * sdf.parse(sdf.format(new Date(System.currentTimeMillis()))); } catch
-	 * (ParseException e) { e.printStackTrace(); }
-	 * 
-	 * this.toString(); }
-	 */
 
 	@Override
 	public String toString() {
@@ -214,47 +201,5 @@ public class Sale {
 			return false;
 		return true;
 	}
-
-	public static String ticketFromJson(String jsonString) {
-		String[] sub = jsonString.split("ticket\":");
-		int finalIndex = sub[1].lastIndexOf("]") + 1;
-		return sub[1].substring(0, finalIndex);
-	}
-
-	/*
-	 * public Sale(String jsonString) { super(); Gson gson = new
-	 * GsonBuilder().excludeFieldsWithoutExposeAnnotation().create(); Sale sale =
-	 * gson.fromJson(jsonString, Sale.class); this.code = sale.getCode();
-	 * this.quantity = sale.getQuantity(); this.totPrice = sale.getTotPrice();
-	 * this.saleDate = sale.getSaleDate(); String ticketString =
-	 * ticketFromJson(jsonString); /* gson = new Gson(); List<Ticket> tickets =
-	 * gson.fromJson(ticketString, new TypeToken<ArrayList<Ticket>>(){}.getType());
-	 * sale.setTicket(tickets); //System.out.println(sale.getTicket(0));
-	 * //System.out.println(sale.getTicket(1));
-	 * 
-	 * }
-	 */
-
-	/*
-	 * {"code":"AAA", "links": [ {"params":
-	 * {"rel":"self","title":"sale","type":"POST"}, "rel":"self", "rels":["self"],
-	 * "title":"sale", "type":"POST", "uri":
-	 * "http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
-	 * "uriBuilder":{"absolute":true}},
-	 * 
-	 * {"params":{"rel":"next","title":"sale","type":"PUT"}, "rel":"next",
-	 * "rels":["next"], "title":"sale", "type":"PUT", "uri":
-	 * "http://localhost:8080/progetto-aereo-6/ticketsale/tickets/C10001/sale",
-	 * "uriBuilder":{"absolute":true}} ], "quantity":2,
-	 * "saleDate":"2020-02-28T03:11:00Z[UTC]", "ticket": [
-	 * {"arrivalAirport":"Milano", "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
-	 * "code":"C10001", "departureAirport":"Roma",
-	 * "departureTime":"0016-04-09T13:10:00Z[UTC]", "price":20.0, "seat":0},
-	 * 
-	 * {"arrivalAirport":"Milano", "arrivalTime":"0016-04-09T14:10:00Z[UTC]",
-	 * "code":"C10001", "departureAirport":"Roma",
-	 * "departureTime":"0016-04-09T13:10:00Z[UTC]", "price":20.0, "seat":0} ],
-	 * "totPrice":40.0}
-	 */
 
 }

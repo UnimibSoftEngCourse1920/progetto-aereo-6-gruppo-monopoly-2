@@ -30,44 +30,32 @@ public class CustomerController {
 
 	@Context
 	UriInfo uriInfo;
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	public Response getCustomer(@HeaderParam("Authorization") String token) {
+	public Response getUser(@HeaderParam("Authorization") String token) {
 		
 		token = token.replaceFirst("Bearer ", "");
 		int i = token.indexOf("@");
 		String username = token.substring(0, i);
 		User user = UserRepository.getInstance().find(username);
 		
+		DtoCustomer resCustomer = new DtoCustomer();
+		System.out.println(user);
+		
+		if(user instanceof Customer)
+			resCustomer.createDtoCustomer((Customer) user);
+		else
+			resCustomer.createDtoCustomer(user);
+		
 		Link self = Link.fromUri(uriInfo.getAbsolutePath())
-				.title("customer")
+				.title("user")
 				.rel("self")
 				.type("GET")
 				.build();
 		
-		Link create = Link.fromUri(uriInfo.getAbsolutePath())
-				.title("customer")
-				.rel("create")
-				.type("POST")
-				.build();
-		
 		List<Link> links = new ArrayList<>();
-		
-		DtoCustomer resCustomer = new DtoCustomer();
-		
-		if(!(user instanceof Customer)) {
-			resCustomer.newCustomer(username, "", "", "", 0);
-			links.add(self);
-			links.add(create);
-			resCustomer.setLinks(links);
-			return Response.ok(resCustomer).links(self, create).build();
-		}
-
-		resCustomer.newCustomer(username, ((Customer) user).getName(), ((Customer) user).getSurname(),
-				((Customer) user).getEmail(), ((Customer) user).getPoint());
-		
 		links.add(self);
 		resCustomer.setLinks(links);
 		
@@ -99,19 +87,21 @@ public class CustomerController {
 		customer.setUsername(user.getUsername());
 		customer.setPassword(user.getPassword());
 		customer.setToken(user.getToken());
-		customer.subscribe(reqCustomer.getName(), reqCustomer.getSurname(), reqCustomer.getEmail());
+		try {
+			customer.subscribe(reqCustomer.getName(), reqCustomer.getSurname(), reqCustomer.getEmail());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		UserRepository.getInstance().update(customer.getUsername(), customer);
 		
+		DtoCustomer resCustomer = new DtoCustomer();
+		resCustomer.createDtoCustomer(customer);
 		
 		Link prev = Link.fromUri(uriInfo.getAbsolutePath())
 				.title("customer")
 				.rel("prev")
 				.type("GET")
 				.build();
-		
-		DtoCustomer resCustomer = new DtoCustomer();
-		resCustomer.newCustomer(customer.getUsername(), customer.getName(), customer.getSurname(),
-				customer.getEmail(), customer.getPoint());
 		
 		List<Link> links = new ArrayList<>();
 		links.add(prev);

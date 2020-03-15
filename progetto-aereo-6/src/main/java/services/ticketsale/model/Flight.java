@@ -105,7 +105,7 @@ public class Flight {
 	public void setSeats(boolean[] seats) {
 		this.seats = seats;
 	}
-	
+
 	public int findSeat() {
 		int i;
 		for(i = 1; i < seatsNumber; i++) {
@@ -115,6 +115,10 @@ public class Flight {
 			}
 		}
 		return 0;
+	}
+	
+	public void freeSeat(int seat) {
+		this.setSeats(seat, false);
 	}
 
 	@Override

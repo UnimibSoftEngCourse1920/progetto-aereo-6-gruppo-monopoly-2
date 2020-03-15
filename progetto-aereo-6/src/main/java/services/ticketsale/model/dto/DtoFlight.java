@@ -7,42 +7,31 @@ import javax.ws.rs.core.Link;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import services.ticketsale.model.Ticket;
+import services.ticketsale.model.Flight;
 
-public class DtoTicket {
+public class DtoFlight {
+
 	private String code;
 	private String departureAirport;
 	private String arrivalAirport;
 	private String departureTime;
 	private String arrivalTime;
 	private double price;
-	private int seat;
-	private String holderName;
-	private String holderSurname;
+	private int seatsNumber;
 	@JsonIgnore
 	private List<Link> links;
 
-	public DtoTicket() {}
+	public DtoFlight() {}
 
-	public void buildDtoTicket(Ticket ticket) {
-		this.code = ticket.getFlight().getCode();
-		this.departureAirport = ticket.getFlight().getDepartureAirport();
-		this.arrivalAirport = ticket.getFlight().getArrivalAirport();
+	public void buildDtoFlight(Flight flight) {
+		this.code = flight.getCode();
+		this.departureAirport = flight.getDepartureAirport();
+		this.arrivalAirport = flight.getArrivalAirport();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-		this.departureTime = sdf.format(ticket.getFlight().getDepartureTime());
-		this.arrivalTime = sdf.format(ticket.getFlight().getArrivalTime());
-		this.price = ticket.getFlight().getPrice();
-		this.seat = ticket.getSeat();
-
-		if (ticket.getHolderName() == null)
-			this.holderName = "";
-		else
-			this.holderName = ticket.getHolderName();
-
-		if (ticket.getHolderSurname() == null)
-			this.holderSurname = "";
-		else
-			this.holderSurname = ticket.getHolderSurname();
+		this.departureTime = sdf.format(flight.getDepartureTime());
+		this.arrivalTime = sdf.format(flight.getArrivalTime());
+		this.price = flight.getPrice();
+		this.seatsNumber = flight.getSeatsNumber();
 	}
 
 	public String getCode() {
@@ -93,28 +82,12 @@ public class DtoTicket {
 		this.price = price;
 	}
 
-	public int getSeat() {
-		return seat;
+	public int getSeatsNumber() {
+		return seatsNumber;
 	}
 
-	public void setSeat(int seat) {
-		this.seat = seat;
-	}
-
-	public String getHolderName() {
-		return holderName;
-	}
-
-	public void setHolderName(String holderName) {
-		this.holderName = holderName;
-	}
-
-	public String getHolderSurname() {
-		return holderSurname;
-	}
-
-	public void setHolderSurname(String holderSurname) {
-		this.holderSurname = holderSurname;
+	public void setSeatsNumber(int seatsNumber) {
+		this.seatsNumber = seatsNumber;
 	}
 
 	public List<Link> getLinks() {
