@@ -34,8 +34,8 @@ function creaTabella(jsonObj){
 	
 	for(x in jsonObj){
 		var item=jsonObj[x];
-		var prenotazione="<a href='login.html'><input type='button' onclick='pagamento(item)' value='prenota' class='primary'/></a>";
-		var acquisto="<a href='login.html'><input type='button' onclick='pagamento(item)' value='acquista' class='primary'/></a>";
+		var prenotazione="<a href='#login'><input type='button' onclick='pagamento(item)' value='prenota' class='primary'/></a>";
+		var acquisto="<a href='#login'><input type='button' onclick='pagamento(item)' value='acquista' class='primary'/></a>";
 		table += "<tr><td>" +
 		item.code +
 		"</td><td>" +
@@ -249,21 +249,25 @@ function creaTabellaCliente(){
 	}
 	document.getElementById("tabellaPrenotazioneCliente").innerHTML = table;	
 }
-function ricercaData(data){
+function ricercaData(){
 	var dataFile ="http://localhost:8080/progetto-aereo-6/ticketsale/tickets";
 	var xhttp;
 	var table;
-	//var data=Date.parse(document.getElementById("sceltaData").submit);
-	//console.log(data);
+	var form=document.forms["sceltaData"];
+	var data="";
+	console.log(form);
+	for(var i=0;i<form.lenght;i++){
+		data+=form[i].value  + "<br>";
+	}
+	console.log(data);
 	if(window.XMLHttpRequest){
 		xhttp=new XMLHttpRequest();
 	}else{
 		xhttp=new ActiceXObject("Microsoft.XMLHTTP");
 	}
 	xhttp.onreadystatechange=function(){
-		console.log(this.status);
+		
 		if(this.readyState==4 && this.status==200){
-			console.log(data);
 			var jsonObj=JSON.parse(xhttp.responseText);
 			table=ricercaTabellaData(jsonObj,data);
 		}		
@@ -492,9 +496,9 @@ function populateDays(month) {
   var dayNum;
 
   // 31 or 30 days?
-  if(month === 'January' || month === 'March' || month === 'May' || month === 'July' || month === 'August' || month === 'October' || month === 'December') {
+  if(month === '1' || month === '3' || month === '5' || month === '7' || month === '8' || month === '10' || month === '12') {
     dayNum = 31;
-  } else if(month === 'April' || month === 'June' || month === 'September' || month === 'November') {
+  } else if(month === '4' || month === '6' || month === '9' || month === '11') {
     dayNum = 30;
   } else {
   // If month is February, calculate whether it is a leap year or not

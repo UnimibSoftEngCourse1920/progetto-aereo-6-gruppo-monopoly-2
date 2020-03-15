@@ -83,7 +83,7 @@
 			<article id="data">
 				<h2 class="major">Ricerca per Data</h2>
 				<section>
-					<form id="sceltaData" action="#tabellaData" onclick="ricercaData(this.value)" >
+					<form id="sceltaData" action="#tabellaData" >
 						<div class="nativeDateTimePicker">
 							<label for="party">Choose a date and time for your departure:</label>
 							<input type="datetime-local" id="party" name="bday"> <span
@@ -93,23 +93,21 @@
 							departure:</p>
 						<div class="fallbackDateTimePicker">
 							<div>
-								<span> <label for="day">Day:</label> <select id="day"
-									name="day">
-								</select>
+								<span> <label for="day">Day:</label> <select id="day" name="day"></select>
 								</span> <span> <label for="month">Month:</label> <select
 									id="month" name="month">
-										<option selected>January</option>
-										<option>February</option>
-										<option>March</option>
-										<option>April</option>
-										<option>May</option>
-										<option>June</option>
-										<option>July</option>
-										<option>August</option>
-										<option>September</option>
-										<option>October</option>
-										<option>November</option>
-										<option>December</option>
+										<option selected>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+										<option>9</option>
+										<option>10</option>
+										<option>11</option>
+										<option>12</option>
 								</select>
 								</span> <span> <label for="year">Year:</label> <select id="year"
 									name="year">
@@ -128,7 +126,7 @@
 						</div>
 						<br>
 						<ul class="actions">
-							<li><input type="submit"  value="Send Info"
+							<li><input type="submit"  value="Send Info" onclick="ricercaData()" 
 								class="primary" /></li>
 						</ul>
 					</form>
