@@ -1,0 +1,26 @@
+Build Progetto-Aereo-6:
+
+- Scaricare e installare Tomcat v9
+
+- Scaricare e installare Maven
+
+- Aprire una finestra di terminale e digitare in ordine i seguenti comandi
+
+---  git clone https://github.com/UnimibSoftEngCourse1920/progetto-aereo-6-gruppo-monopoly-2.git --branch update
+
+--- cd progetto-aereo-6-gruppo-monopoly-2/progetto-aereo-6
+
+--- maven clean install
+
+- Entrare nella cartella {pat per la cartella dove avete clonato la repository}/progetto-aereo-6-gruppo-monopoly-2/progetto-aereo-6/target
+
+- Copiare il file war presente nella cartella
+
+- Entrate nella cartella {Path per la cartella del server tomcat}/webapps
+
+- Incollate il file war copiato in precedenza
+
+- Avviate il server tomcat
+
+- Da un browser qualsiasi potete accedere all'app da http://localhost:8080/progetto-aereo-6
+

@@ -1,0 +1,123 @@
+Documentazione API
+
+
+/tickets
+
+GET: Lista JSON di DtoFlight.
+
+
+
+/tickets/{code}
+
+GET: JSON di DtoFligt specificato da {code} in FlightRepository.
+
+
+
+/tickets/{code}/sale
+
+GET: JSON di DtoSale con holdersName[quantity] e holdersSurname[quantity] riempiti con stringhe vuote.
+
+@Secured
+POST: JSON di DtoSale.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Payload -> JSON di DtoSale, holdersName[quantity] e holdersSurname[quantity] riempiti i relativi nomi e cognomi dei possessori del biglietto.
+
+
+
+/tickets/{code}/sale/premium
+
+@Secured
+POST: JSON di DtoSale.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Payload -> JSON di DtoSale, holdersName[quantity] e holdersSurname[quantity] riempiti i relativi nomi e cognomi dei possessori del biglietto.
+
+
+
+/tickets/{code}/change/{salecode}
+
+@Secured
+GET: JSON di DtoSale specificato da {salcode} in SaleRepository.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+
+@Secured
+POST: JSON di DtoSale con i nuovi ticket per il volo {code}.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Payload -> JSON di DtoSale, holdersName[quantity] e holdersSurname[quantity] riempiti i relativi nomi e cognomi dei possessori del biglietto.
+
+
+
+/tickets/{code}/reservation
+
+GET: JSON di DtoSale con holdersName[quantity] e holdersSurname[quantity] riempiti con stringhe vuote.
+
+@Secured
+POST: JSON di DtoSale.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Payload -> JSON di DtoSale holdersName[quantity] e holdersSurname[quantity] riempiti i relativi nomi e cognomi dei possessori del biglietto.
+
+@Secured
+PUT: JSON di DtoSale.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Header -> Content-Type: application/x-www-form-urlencoded
+Payload -> salecode="codice_dell'acquisto"
+
+
+
+/home
+
+@Secured
+@GET: JSON di DtoCustomer.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+
+@Secured
+POST: JSON di DtoCustomer.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Payload -> JSON di DtoCustomer, email, name, surname non vuoti.
+
+
+
+/home/creditcard
+
+@Secured
+GET: JSON di CrediCard.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+
+@Secured
+POST: JSON di DtoCustomer.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+Payload -> JSON di CreditCard, con tutti gli attributi complati.
+
+
+
+/home/sales
+
+@Secured
+GET: Lista JSON di DtoSale.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+
+
+
+/home/sales/{salecode}
+
+@Secured
+GET: JSON di DtoSale specificato da {salecode}.
+Header -> Authorization: Bearer username@RANDOMTOKEN
+
+
+
+/auth/authentication
+
+POST: Stringa con token.
+Header -> Content-Type: application/x-www-form-urlencoded
+Payload -> username="username"&password="password"
+
+
+
+/auth/registration
+
+POST: Stringa con token.
+Header -> Content-Type: application/x-www-form-urlencoded
+Payload -> username="username"&password="password"
+
+
+
