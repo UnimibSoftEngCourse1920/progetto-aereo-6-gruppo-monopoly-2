@@ -1,6 +1,5 @@
 package services.ticketsale.repository;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +18,6 @@ public class SaleRepository {
 
 	private SaleRepository() {
 		this.sales = new HashMap<>();
-	}
-
-	public Collection<Sale> findAll() {
-		return this.sales.values();
 	}
 
 	public Sale find(String code) {

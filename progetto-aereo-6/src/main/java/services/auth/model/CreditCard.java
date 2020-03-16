@@ -1,4 +1,4 @@
-package services.customer.model;
+package services.auth.model;
 
 public class CreditCard {
 	private String holder;

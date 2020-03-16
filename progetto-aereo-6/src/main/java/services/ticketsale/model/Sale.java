@@ -110,7 +110,7 @@ public class Sale {
 		
 		if(customer instanceof Customer) {
 			int point = ((Customer) customer).getPoint();
-			((Customer) customer).setPoint(point + (int)this.totPrice);
+			((Customer) customer).setPoint(point + (int) this.totPrice);
 		}
 		
 		for(int i = 0; i < this.quantity; i++) {
@@ -169,6 +169,27 @@ public class Sale {
 			e.printStackTrace(); 
 		} 
 	}
+	
+	public void reservation(User customer, String[] names, String[] surnames) {
+		
+		this.setCustomer(customer);
+		
+		for(int i = 0; i < this.quantity; i++) {
+			Ticket ticket = this.getTickets(i);
+			ticket.setSeat(ticket.getFlight().findSeat());
+			ticket.setHolderName(names[i]);
+			ticket.setHolderSurname(surnames[i]);
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		try { 
+			this.saleDate = sdf.parse(sdf.format(new Date(System.currentTimeMillis()))); 
+		} catch (ParseException e) { 
+			e.printStackTrace(); 
+		} 
+	}
+	
 
 	@Override
 	public String toString() {

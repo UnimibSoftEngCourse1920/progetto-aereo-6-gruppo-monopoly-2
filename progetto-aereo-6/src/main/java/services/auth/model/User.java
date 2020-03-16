@@ -3,7 +3,6 @@ package services.auth.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import services.customer.model.CreditCard;
 import services.ticketsale.model.Sale;
 
 public class User {

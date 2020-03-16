@@ -18,6 +18,10 @@ public class UserRepository {
 		
 	private UserRepository() {
 		this.users = new HashMap<>();
+		User u = new User();
+		u.setUsername("test");
+		u.setPassword("test");
+		this.users.put(u.getUsername(), u);
 	}
 		
 	public User find(String username) {
